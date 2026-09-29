@@ -1,0 +1,2397 @@
+<!DOCTYPE html>
+<html lang="hi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Maha Sell - Trade & Earning Portal</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Poppins', sans-serif; -webkit-tap-highlight-color: transparent; }
+        :root {
+            --brand-orange: #ff9933; --brand-yellow: #ffc107; --text-light: #ffffff;
+            --text-muted: #d1d5db; --glass-bg: rgba(255, 255, 255, 0.1);
+            --glass-border: rgba(255, 255, 255, 0.2); --glass-card: rgba(10, 25, 47, 0.6);
+            --success: #2ecc71; --warning: #f39c12; --danger: #e74c3c; --info: #3498db;
+            --transition: all 0.3s ease;
+        }
+        body { background: linear-gradient(135deg, #0f2027, #203a43, #2c5364); background-attachment: fixed; color: var(--text-light); padding-top: 75px; padding-bottom: 90px; min-height: 100vh; }
+        .brand-logo-img { width: 42px; height: 42px; border-radius: 10px; object-fit: contain; border: 2px solid var(--brand-orange); box-shadow: 0 4px 12px rgba(255, 153, 51, 0.4); background: #000; padding: 2px; }
+        .brand-logo-large { width: 100px; height: 100px; border-radius: 20px; object-fit: contain; border: 3px solid var(--brand-orange); box-shadow: 0 8px 30px rgba(255, 153, 51, 0.5); margin-bottom: 12px; background: #000; padding: 4px; }
+
+        .auth-screen { position: fixed; top: 0; left: 0; right: 0; bottom: 0; background: linear-gradient(135deg, #0f2027, #203a43, #2c5364); z-index: 5000; display: none; align-items: center; justify-content: center; padding: 20px; overflow-y: auto; }
+        .auth-screen.active { display: flex; }
+        .auth-card { width: 100%; max-width: 420px; background: rgba(10, 25, 47, 0.85); backdrop-filter: blur(20px); border: 1px solid var(--glass-border); border-radius: 20px; padding: 28px 24px; box-shadow: 0 20px 60px rgba(0, 0, 0, 0.5); margin: auto; }
+        .auth-logo { text-align: center; margin-bottom: 18px; }
+        .auth-logo h1 { font-size: 1.8rem; font-weight: 800; background: linear-gradient(135deg, #ffc107, #ff9933, #fff); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text; letter-spacing: 1px; }
+        .auth-logo .brand-sub { font-size: 0.75rem; color: var(--brand-orange); letter-spacing: 3px; text-transform: uppercase; margin-top: 2px; }
+        .auth-logo p { font-size: 0.78rem; color: var(--text-muted); margin-top: 6px; }
+        .auth-title { font-size: 1.15rem; font-weight: 600; margin-bottom: 18px; text-align: center; color: #fff; }
+        .auth-field { position: relative; margin-bottom: 14px; }
+        .auth-field i.field-icon { position: absolute; left: 14px; top: 50%; transform: translateY(-50%); color: var(--brand-orange); font-size: 0.9rem; }
+        .auth-field input { width: 100%; padding: 13px 14px 13px 42px; background: rgba(0, 0, 0, 0.35); border: 1px solid var(--glass-border); border-radius: 10px; color: #fff; font-size: 0.92rem; outline: none; transition: var(--transition); }
+        .auth-field input:focus { border-color: var(--brand-orange); background: rgba(0, 0, 0, 0.5); }
+        .auth-field input::placeholder { color: #8899aa; }
+        .auth-field .toggle-pass { position: absolute; right: 14px; top: 50%; transform: translateY(-50%); color: var(--text-muted); cursor: pointer; font-size: 0.9rem; }
+        .auth-options { display: flex; justify-content: space-between; align-items: center; font-size: 0.78rem; margin-bottom: 16px; color: var(--text-muted); }
+        .auth-options a { color: var(--brand-orange); text-decoration: none; cursor: pointer; }
+        .terms-box { display: flex; align-items: flex-start; gap: 10px; margin-bottom: 16px; font-size: 0.78rem; color: var(--text-muted); line-height: 1.5; }
+        .terms-box input[type="checkbox"] { width: 18px; height: 18px; margin-top: 2px; accent-color: var(--brand-orange); cursor: pointer; flex-shrink: 0; }
+        .terms-box a { color: var(--brand-orange); text-decoration: none; cursor: pointer; font-weight: 600; }
+        .terms-box a:hover { text-decoration: underline; }
+        .auth-btn { width: 100%; padding: 13px; background: linear-gradient(135deg, var(--brand-orange), #e68529); color: #fff; border: none; border-radius: 10px; font-size: 0.95rem; font-weight: 600; cursor: pointer; transition: var(--transition); box-shadow: 0 4px 15px rgba(255, 153, 51, 0.3); display: flex; align-items: center; justify-content: center; gap: 8px; }
+        .auth-btn:hover { transform: translateY(-2px); }
+        .auth-btn:disabled { opacity: 0.6; cursor: not-allowed; transform: none; }
+        .auth-switch { text-align: center; margin-top: 18px; font-size: 0.85rem; color: var(--text-muted); }
+        .auth-switch a { color: var(--brand-orange); font-weight: 600; cursor: pointer; text-decoration: none; }
+        .auth-error { background: rgba(255, 82, 82, 0.15); border: 1px solid rgba(255, 82, 82, 0.4); color: #ff8080; padding: 10px 12px; border-radius: 8px; font-size: 0.82rem; margin-bottom: 14px; display: none; }
+        .auth-error.show { display: block; }
+        .auth-loader { display: none; text-align: center; margin-top: 14px; color: var(--brand-orange); font-size: 0.85rem; }
+        .auth-loader.show { display: block; }
+
+        .header { position: fixed; top: 0; left: 0; right: 0; height: 65px; background: rgba(10, 25, 47, 0.85); backdrop-filter: blur(12px); border-bottom: 1px solid var(--glass-border); color: var(--text-light); display: flex; align-items: center; justify-content: space-between; padding: 0 16px; z-index: 1000; }
+        .header .logo { display: flex; align-items: center; gap: 10px; font-weight: 700; }
+        .header .logo-text-wrap { display: flex; flex-direction: column; line-height: 1; }
+        .header .logo-text { font-weight: 800; font-size: 1.05rem; background: linear-gradient(135deg, #ffc107, #ff9933); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text; }
+        .header .logo-tagline { font-size: 0.55rem; color: var(--text-muted); letter-spacing: 1.5px; margin-top: 2px; }
+        .header-actions { display: flex; align-items: center; gap: 10px; }
+        .header-btn { background: var(--glass-bg); border: 1px solid var(--glass-border); color: var(--text-light); width: 38px; height: 38px; border-radius: 50%; display: flex; align-items: center; justify-content: center; cursor: pointer; transition: var(--transition); }
+
+        .container { max-width: 600px; margin: 0 auto; padding: 15px; }
+        .section { display: none; animation: fadeIn 0.3s ease-in-out; }
+        .section.active { display: block; }
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(8px); } to { opacity: 1; transform: translateY(0); } }
+
+        .card { background: var(--glass-card); backdrop-filter: blur(16px); border: 1px solid var(--glass-border); border-radius: 16px; padding: 20px; margin-bottom: 15px; box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.3); }
+        .banner-card { background: linear-gradient(135deg, rgba(255, 153, 51, 0.35), rgba(255, 193, 7, 0.15)); }
+        .balance-label { font-size: 0.85rem; color: var(--text-muted); text-transform: uppercase; }
+        .balance-amount { font-size: 2rem; font-weight: 700; margin: 5px 0 5px; color: #fff; }
+
+        .balance-sell-row { display: flex; align-items: center; justify-content: space-between; gap: 12px; }
+        .balance-sell-row .balance-info { flex: 1; min-width: 0; }
+        .btn-sell-main { background: linear-gradient(135deg, #2ecc71, #27ae60); color: #fff; border: none; padding: 12px 20px; border-radius: 12px; font-size: 0.9rem; font-weight: 700; cursor: pointer; display: flex; align-items: center; gap: 8px; box-shadow: 0 4px 15px rgba(46, 204, 113, 0.4); transition: var(--transition); white-space: nowrap; flex-shrink: 0; }
+        .btn-sell-main:hover { transform: translateY(-2px); box-shadow: 0 6px 20px rgba(46, 204, 113, 0.55); }
+        .btn-sell-main:disabled { background: rgba(255,255,255,0.15); color: var(--text-muted); box-shadow: none; cursor: not-allowed; transform: none; }
+
+        .btn { width: 100%; padding: 12px; border: none; border-radius: 10px; font-weight: 600; font-size: 0.95rem; cursor: pointer; transition: var(--transition); display: flex; align-items: center; justify-content: center; gap: 8px; }
+        .btn-primary { background: linear-gradient(135deg, var(--brand-orange), #e68529); color: var(--text-light); box-shadow: 0 4px 15px rgba(255, 153, 51, 0.3); }
+        .btn-secondary { background: var(--glass-bg); border: 1px solid var(--glass-border); color: var(--text-light); }
+        .btn-danger { background: linear-gradient(135deg, #e74c3c, #c0392b); color: #fff; }
+        .btn:disabled { opacity: 0.5; cursor: not-allowed; }
+
+        .section-title { font-size: 1.1rem; font-weight: 600; margin-bottom: 15px; color: var(--text-light); display: flex; align-items: center; justify-content: space-between; }
+
+        .welcome-card { display: flex; align-items: center; gap: 14px; padding: 16px 20px; background: linear-gradient(135deg, rgba(255, 153, 51, 0.35), rgba(255, 193, 7, 0.15)); border: 1px solid var(--glass-border); border-radius: 16px; margin-bottom: 15px; box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.3); backdrop-filter: blur(16px); position: relative; overflow: hidden; }
+        .welcome-card::before { content: ''; position: absolute; top: -50%; right: -20%; width: 140px; height: 140px; background: radial-gradient(circle, rgba(255, 153, 51, 0.25), transparent 70%); border-radius: 50%; pointer-events: none; }
+        .welcome-avatar { width: 56px; height: 56px; border-radius: 50%; object-fit: cover; border: 3px solid var(--brand-orange); box-shadow: 0 4px 15px rgba(255, 153, 51, 0.5); background: #0f2027; flex-shrink: 0; padding: 0; transition: var(--transition); }
+        .welcome-avatar:hover { transform: scale(1.05); }
+        .welcome-text-wrap { display: flex; flex-direction: column; gap: 3px; min-width: 0; flex: 1; }
+        .welcome-label { font-size: 0.72rem; color: var(--text-muted); text-transform: uppercase; letter-spacing: 1px; }
+        .welcome-name { font-size: 1.25rem; font-weight: 700; color: #fff; line-height: 1.15; word-break: break-word; display: flex; align-items: center; gap: 6px; }
+        .welcome-name .online-dot { width: 8px; height: 8px; border-radius: 50%; background: var(--success); box-shadow: 0 0 8px var(--success); display: inline-block; animation: onlinePulse 2s infinite; }
+        @keyframes onlinePulse { 0%, 100% { opacity: 1; transform: scale(1); } 50% { opacity: 0.6; transform: scale(1.15); } }
+
+        .banner-slider { position: relative; width: 100%; border-radius: 16px; overflow: hidden; margin-bottom: 15px; box-shadow: 0 8px 30px rgba(0, 0, 0, 0.4); background: #000; }
+        .banner-slide { display: none; width: 100%; background: #000; line-height: 0; }
+        .banner-slide.active { display: block; }
+        .banner-slide img { width: 100%; height: auto; max-height: 400px; object-fit: contain; display: block; }
+        .banner-dots { position: absolute; bottom: 10px; left: 50%; transform: translateX(-50%); display: flex; gap: 6px; z-index: 2; }
+        .banner-dot { width: 8px; height: 8px; border-radius: 50%; background: rgba(255,255,255,0.5); cursor: pointer; transition: all 0.3s; }
+        .banner-dot.active { background: var(--brand-orange); width: 20px; border-radius: 4px; }
+        .banner-nav { position: absolute; top: 50%; transform: translateY(-50%); background: rgba(0,0,0,0.55); border: none; color: #fff; width: 34px; height: 34px; border-radius: 50%; cursor: pointer; display: flex; align-items: center; justify-content: center; z-index: 3; transition: var(--transition); }
+        .banner-nav:hover { background: rgba(255,153,51,0.85); }
+        .banner-nav.prev { left: 8px; }
+        .banner-nav.next { right: 8px; }
+
+        .stats-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 12px; margin-bottom: 15px; }
+        .stat-card { background: rgba(255, 255, 255, 0.07); border: 1px solid var(--glass-border); padding: 15px; border-radius: 12px; text-align: center; }
+        .stat-value { font-size: 1.2rem; font-weight: 700; color: var(--brand-orange); margin-top: 5px; }
+        .stat-label { font-size: 0.75rem; color: var(--text-muted); }
+
+        .bonus-card { background: linear-gradient(135deg, rgba(255, 153, 51, 0.15), rgba(0, 102, 204, 0.25)); border: 1px solid rgba(255, 153, 51, 0.4); border-radius: 14px; padding: 15px; margin-bottom: 12px; display: flex; align-items: center; justify-content: space-between; }
+        .bonus-info { display: flex; align-items: center; gap: 12px; }
+        .bonus-icon { width: 42px; height: 42px; border-radius: 10px; background: rgba(255, 153, 51, 0.25); color: var(--brand-orange); display: flex; align-items: center; justify-content: center; font-size: 1.3rem; border: 1px solid rgba(255, 153, 51, 0.4); }
+        .bonus-text h5 { font-size: 0.95rem; font-weight: 600; color: #fff; }
+        .bonus-text p { font-size: 0.75rem; color: var(--text-muted); }
+        .btn-claim { background: var(--brand-orange); color: #fff; border: none; padding: 6px 14px; border-radius: 8px; font-size: 0.8rem; font-weight: 600; cursor: pointer; transition: var(--transition); }
+        .btn-claim:disabled { background: rgba(255, 255, 255, 0.2); color: var(--text-muted); cursor: not-allowed; }
+
+        .orders-grid { display: grid; grid-template-columns: 1fr; gap: 15px; }
+        .order-card { background: rgba(10, 25, 47, 0.65); border: 1px solid var(--glass-border); border-radius: 14px; padding: 15px; display: flex; flex-direction: column; gap: 10px; }
+        .order-header { display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid rgba(255, 255, 255, 0.1); padding-bottom: 8px; }
+        .order-range { font-size: 1.1rem; font-weight: 700; color: var(--brand-orange); }
+        .order-stock { background: rgba(0, 102, 204, 0.3); border: 1px solid #0066cc; padding: 2px 10px; border-radius: 12px; font-size: 0.75rem; font-weight: 600; }
+        .order-details { display: flex; justify-content: space-between; font-size: 0.9rem; color: var(--text-muted); }
+        .order-details strong { color: #fff; }
+        .order-footer { display: flex; justify-content: space-between; align-items: center; margin-top: 5px; }
+        .amount-tag { font-size: 1.2rem; font-weight: 700; color: var(--success); }
+        .btn-buy { width: auto; padding: 8px 25px; background: linear-gradient(135deg, var(--brand-orange), #e68529); color: #fff; border: none; border-radius: 8px; font-weight: 600; cursor: pointer; }
+
+        .list-item { display: flex; justify-content: space-between; align-items: center; padding: 14px 0; border-bottom: 1px solid rgba(255, 255, 255, 0.1); color: var(--text-light); text-decoration: none; cursor: pointer; }
+        .list-item-left { display: flex; align-items: center; gap: 12px; font-size: 0.95rem; }
+        .list-item-left i { color: var(--brand-orange); width: 20px; }
+        .list-item-right { display: flex; align-items: center; gap: 8px; }
+        .list-item-value { font-size: 0.9rem; font-weight: 700; color: var(--success); }
+
+        .user-profile-header { display: flex; align-items: center; gap: 15px; background: linear-gradient(135deg, rgba(255, 153, 51, 0.35), rgba(10, 25, 47, 0.75)); border: 1px solid var(--glass-border); border-radius: 16px; padding: 18px; margin-bottom: 15px; }
+        .user-avatar { width: 60px; height: 60px; border-radius: 50%; background: linear-gradient(135deg, var(--brand-orange), #ff6600); display: flex; align-items: center; justify-content: center; font-size: 1.8rem; color: #fff; border: 2px solid var(--glass-border); box-shadow: 0 4px 15px rgba(255, 153, 51, 0.3); flex-shrink: 0; overflow: hidden; }
+        .user-avatar img { width: 100%; height: 100%; object-fit: cover; border-radius: 50%; }
+        .user-info { display: flex; flex-direction: column; gap: 3px; overflow: hidden; }
+        .user-name { font-size: 1.15rem; font-weight: 700; color: #fff; word-break: break-word; }
+        .user-email { font-size: 0.8rem; color: var(--text-muted); word-break: break-all; }
+        .user-uid-badge { display: inline-flex; align-items: center; gap: 5px; background: rgba(255, 153, 51, 0.18); border: 1px solid rgba(255, 153, 51, 0.4); color: var(--brand-orange); font-weight: 600; font-size: 0.7rem; padding: 3px 8px; border-radius: 6px; margin-top: 4px; width: fit-content; word-break: break-all; max-width: 100%; }
+
+        .social-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 12px; margin-top: 15px; }
+        .social-btn { display: flex; align-items: center; justify-content: center; gap: 10px; padding: 12px; border-radius: 12px; font-size: 0.9rem; font-weight: 600; color: #fff; border: none; cursor: pointer; transition: var(--transition); }
+        .btn-whatsapp { background: linear-gradient(135deg, #25D366, #128C7E); }
+        .btn-telegram { background: linear-gradient(135deg, #0088cc, #005580); }
+        .btn-facebook { background: linear-gradient(135deg, #1877F2, #0d52a8); }
+        .btn-instagram { background: linear-gradient(45deg, #f09433, #e6683c 25%, #dc2743 50%, #cc2366 75%, #bc1888 100%); }
+
+        .refer-box { background: rgba(255, 153, 51, 0.1); border: 2px dashed var(--brand-orange); border-radius: 10px; padding: 15px; text-align: center; margin: 15px 0; }
+        .refer-code { font-size: 1.4rem; font-weight: 700; color: var(--brand-orange); letter-spacing: 2px; margin-top: 5px; }
+
+        .referral-stats-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 12px; margin: 15px 0; }
+        .referral-stat-card { background: linear-gradient(135deg, rgba(255, 153, 51, 0.2), rgba(255, 193, 7, 0.1)); border: 1px solid rgba(255, 153, 51, 0.35); border-radius: 14px; padding: 16px 12px; text-align: center; position: relative; overflow: hidden; }
+        .referral-stat-card::before { content: ''; position: absolute; top: 0; left: 0; right: 0; height: 3px; background: linear-gradient(90deg, var(--brand-orange), var(--brand-yellow)); }
+        .referral-stat-icon { font-size: 1.4rem; color: var(--brand-orange); margin-bottom: 6px; }
+        .referral-stat-value { font-size: 1.4rem; font-weight: 800; color: #fff; margin: 4px 0; }
+        .referral-stat-label { font-size: 0.72rem; color: var(--text-muted); text-transform: uppercase; letter-spacing: 0.5px; }
+
+        .upi-app-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 10px; margin: 15px 0; }
+        .upi-app-card { background: rgba(255, 255, 255, 0.08); border: 1px solid var(--glass-border); border-radius: 12px; padding: 12px; display: flex; align-items: center; gap: 10px; cursor: pointer; transition: var(--transition); }
+        .upi-app-card:hover, .upi-app-card.selected { border-color: var(--brand-orange); background: rgba(255, 153, 51, 0.18); }
+        .upi-app-card i { font-size: 1.3rem; width: 25px; text-align: center; }
+        .upi-app-name { font-size: 0.85rem; font-weight: 600; color: #fff; }
+
+        .input-group { margin-bottom: 15px; }
+        .input-group label { display: block; font-size: 0.85rem; font-weight: 500; margin-bottom: 5px; color: var(--text-muted); }
+        .input-group input, .input-group textarea { width: 100%; padding: 12px; background: rgba(0, 0, 0, 0.3); border: 1px solid var(--glass-border); border-radius: 8px; color: #fff; font-size: 0.95rem; outline: none; font-family: 'Poppins', sans-serif; }
+        .input-group input:focus, .input-group textarea:focus { border-color: var(--brand-orange); }
+
+        .saved-upi-card { background: rgba(0, 102, 204, 0.2); border: 1px solid #0066cc; border-radius: 12px; padding: 15px; display: flex; align-items: center; justify-content: space-between; margin-bottom: 15px; }
+
+        .bottom-nav { position: fixed; bottom: 0; left: 0; right: 0; height: 65px; background: rgba(10, 25, 47, 0.9); backdrop-filter: blur(12px); border-top: 1px solid var(--glass-border); display: flex; justify-content: space-around; align-items: center; z-index: 1000; }
+        .nav-item { display: flex; flex-direction: column; align-items: center; justify-content: center; color: var(--text-muted); text-decoration: none; font-size: 0.75rem; font-weight: 500; width: 22%; height: 100%; background: none; border: none; cursor: pointer; }
+        .nav-item i { font-size: 1.2rem; margin-bottom: 3px; }
+        .nav-item.active { color: var(--brand-orange); }
+        .nav-plus-btn { position: relative; top: -15px; width: 52px; height: 52px; border-radius: 50%; background: linear-gradient(135deg, var(--brand-orange), #ff6600); border: 3px solid rgba(10, 25, 47, 0.9); color: #fff; font-size: 1.5rem; display: flex; align-items: center; justify-content: center; cursor: pointer; box-shadow: 0 4px 20px rgba(255, 153, 51, 0.5); transition: var(--transition); }
+        .nav-plus-btn:hover { transform: scale(1.08); }
+
+        .drawer, .modal { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0, 0, 0, 0.7); backdrop-filter: blur(5px); z-index: 2000; display: none; align-items: center; justify-content: center; }
+        .drawer { justify-content: flex-end; }
+        .drawer-content { width: 280px; height: 100%; background: rgba(10, 25, 47, 0.95); border-left: 1px solid var(--glass-border); padding: 20px; color: #fff; overflow-y: auto; }
+        .modal-content { background: rgba(10, 25, 47, 0.98); border: 1px solid var(--glass-border); color: #fff; width: 92%; max-width: 460px; border-radius: 16px; padding: 20px; box-shadow: 0 10px 30px rgba(0,0,0,0.5); max-height: 90vh; overflow-y: auto; }
+        .drawer-header, .modal-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 15px; border-bottom: 1px solid rgba(255, 255, 255, 0.1); padding-bottom: 10px; }
+        .close-btn { background: none; border: none; font-size: 1.3rem; cursor: pointer; color: var(--text-muted); }
+
+        .app-loader { position: fixed; top: 0; left: 0; right: 0; bottom: 0; background: linear-gradient(135deg, #0f2027, #203a43, #2c5364); z-index: 9999; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 15px; color: var(--brand-orange); }
+        .app-loader p { font-size: 0.9rem; color: var(--text-muted); }
+        .app-loader.hide { display: none; }
+
+        .admin-upi-box { background: linear-gradient(135deg, rgba(255, 153, 51, 0.2), rgba(0, 102, 204, 0.2)); border: 2px dashed var(--brand-orange); border-radius: 12px; padding: 16px; margin: 15px 0; text-align: center; }
+        .admin-upi-label { font-size: 0.75rem; color: var(--text-muted); text-transform: uppercase; letter-spacing: 1px; }
+        .admin-upi-value { font-size: 1.2rem; font-weight: 700; color: var(--brand-orange); word-break: break-all; margin: 8px 0; }
+        .copy-btn { background: var(--brand-orange); color: #fff; border: none; padding: 8px 20px; border-radius: 8px; font-size: 0.82rem; font-weight: 600; cursor: pointer; transition: var(--transition); display: inline-flex; align-items: center; gap: 6px; }
+        .copy-btn:hover { background: #e68529; }
+
+        .pay-amount-display { background: rgba(46, 204, 113, 0.15); border: 1px solid var(--success); border-radius: 10px; padding: 12px; text-align: center; margin-bottom: 15px; }
+        .pay-amount-display .lbl { font-size: 0.75rem; color: var(--text-muted); text-transform: uppercase; }
+        .pay-amount-display .amt { font-size: 1.6rem; font-weight: 800; color: var(--success); margin-top: 4px; }
+
+        .file-upload-box { border: 2px dashed var(--glass-border); border-radius: 10px; padding: 20px; text-align: center; cursor: pointer; transition: var(--transition); background: rgba(0, 0, 0, 0.2); position: relative; }
+        .file-upload-box:hover { border-color: var(--brand-orange); background: rgba(255, 153, 51, 0.08); }
+        .file-upload-box input[type="file"] { position: absolute; top: 0; left: 0; width: 100%; height: 100%; opacity: 0; cursor: pointer; }
+        .file-upload-box i { font-size: 1.8rem; color: var(--brand-orange); margin-bottom: 6px; }
+        .file-upload-box p { font-size: 0.82rem; color: var(--text-muted); }
+        .file-upload-box .file-name { font-size: 0.78rem; color: var(--success); margin-top: 6px; font-weight: 600; word-break: break-all; }
+        .upload-preview { max-width: 100%; max-height: 180px; border-radius: 8px; margin-top: 10px; border: 1px solid var(--glass-border); }
+
+        .order-history-card { background: rgba(10, 25, 47, 0.7); border: 1px solid var(--glass-border); border-radius: 14px; padding: 15px; margin-bottom: 12px; position: relative; overflow: hidden; }
+        .order-history-card::before { content: ''; position: absolute; top: 0; left: 0; width: 4px; height: 100%; background: var(--warning); }
+        .order-history-card.status-success::before { background: var(--success); }
+        .order-history-card.status-failed::before { background: var(--danger); }
+        .order-history-card.status-processing::before { background: var(--info); }
+        .order-history-card.status-rejected::before { background: var(--danger); }
+        .order-history-card.status-pending::before { background: var(--warning); }
+
+        .order-history-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px; }
+        .order-history-id { font-size: 0.75rem; color: var(--text-muted); }
+        .order-history-range { font-size: 1rem; font-weight: 700; color: #fff; }
+
+        .status-badge { display: inline-flex; align-items: center; gap: 5px; padding: 4px 10px; border-radius: 20px; font-size: 0.7rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.5px; }
+        .status-pending { background: rgba(243, 156, 18, 0.2); color: #f39c12; border: 1px solid #f39c12; }
+        .status-success { background: rgba(46, 204, 113, 0.2); color: #2ecc71; border: 1px solid #2ecc71; }
+        .status-failed { background: rgba(231, 76, 60, 0.2); color: #e74c3c; border: 1px solid #e74c3c; }
+        .status-processing { background: rgba(52, 152, 219, 0.2); color: #3498db; border: 1px solid #3498db; }
+        .status-rejected { background: rgba(231, 76, 60, 0.2); color: #e74c3c; border: 1px solid #e74c3c; }
+
+        .order-history-details { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; font-size: 0.8rem; color: var(--text-muted); margin-top: 8px; }
+        .order-history-details span strong { color: #fff; display: block; font-size: 0.88rem; margin-top: 2px; }
+
+        .milestone-card { background: linear-gradient(135deg, rgba(0, 102, 204, 0.2), rgba(255, 153, 51, 0.15)); border: 1px solid rgba(255, 153, 51, 0.35); border-radius: 14px; padding: 14px; margin-bottom: 12px; }
+        .milestone-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px; }
+        .milestone-title { font-size: 0.88rem; font-weight: 600; color: #fff; }
+        .milestone-reward { font-size: 0.9rem; font-weight: 800; color: var(--success); }
+        .milestone-progress-track { width: 100%; height: 8px; background: rgba(255, 255, 255, 0.15); border-radius: 4px; overflow: hidden; margin-bottom: 5px; }
+        .milestone-progress-fill { height: 100%; background: linear-gradient(90deg, var(--brand-orange), var(--brand-yellow)); border-radius: 4px; transition: width 0.4s ease; }
+        .milestone-count { font-size: 0.72rem; color: var(--text-muted); text-align: right; }
+
+        .gift-code-hint { background: rgba(0, 136, 204, 0.15); border: 1px solid #0088cc; border-radius: 10px; padding: 10px 12px; font-size: 0.78rem; color: #6bc7ff; margin-top: 10px; display: flex; align-items: center; gap: 8px; }
+        .gift-code-hint i { font-size: 1rem; }
+
+        .broadcast-banner { background: linear-gradient(135deg, rgba(231, 76, 60, 0.3), rgba(155, 89, 182, 0.25)); border: 1px solid rgba(231, 76, 60, 0.5); border-radius: 12px; padding: 12px 14px; margin-bottom: 15px; display: flex; align-items: flex-start; gap: 10px; font-size: 0.85rem; color: #fff; }
+        .broadcast-banner i { color: #ffc107; font-size: 1.2rem; margin-top: 2px; }
+        .broadcast-banner .msg { flex: 1; line-height: 1.5; }
+        .broadcast-banner .close-b { background: none; border: none; color: var(--text-muted); cursor: pointer; font-size: 1rem; }
+
+        .blocked-screen { position: fixed; top: 0; left: 0; right: 0; bottom: 0; background: linear-gradient(135deg, #1a0000, #2c0000); z-index: 6000; display: none; align-items: center; justify-content: center; padding: 25px; text-align: center; }
+        .blocked-screen.show { display: flex; }
+        .blocked-card { max-width: 380px; background: rgba(10, 25, 47, 0.9); border: 2px solid #e74c3c; border-radius: 20px; padding: 30px 24px; }
+        .blocked-card i.blocked-icon { font-size: 3.5rem; color: #e74c3c; margin-bottom: 15px; }
+        .blocked-card h2 { color: #e74c3c; font-size: 1.3rem; margin-bottom: 10px; font-weight: 700; }
+        .blocked-card p { color: var(--text-muted); font-size: 0.88rem; line-height: 1.6; margin-bottom: 20px; }
+
+        .empty-state { text-align:center; padding:40px 20px; color:var(--text-muted); }
+        .empty-state i { font-size:2rem; opacity:0.4; }
+        .empty-state p { margin-top:10px; font-size:0.85rem; }
+
+        .utr-info-box { background: rgba(243, 156, 18, 0.15); border: 1px solid rgba(243, 156, 18, 0.5); border-radius: 10px; padding: 10px 12px; font-size: 0.75rem; color: #f39c12; margin-bottom: 12px; display: flex; align-items: flex-start; gap: 8px; line-height: 1.5; }
+        .utr-info-box i { font-size: 1rem; margin-top: 1px; flex-shrink: 0; }
+        .utr-info-box strong { color: #ffc107; }
+
+        .upi-list-card { background: rgba(10, 25, 47, 0.75); border: 1px solid var(--glass-border); border-radius: 12px; padding: 12px 14px; margin-bottom: 10px; display: flex; align-items: center; gap: 12px; transition: var(--transition); }
+        .upi-list-card.active-upi { border-color: var(--success); background: rgba(46, 204, 113, 0.08); }
+        .upi-list-card.inactive-upi { opacity: 0.55; }
+        .upi-list-card .upi-app-badge { width: 40px; height: 40px; border-radius: 10px; display: flex; align-items: center; justify-content: center; font-size: 1.1rem; color: #fff; flex-shrink: 0; background: linear-gradient(135deg, var(--brand-orange), #e68529); }
+        .upi-list-card .upi-info { flex: 1; min-width: 0; }
+        .upi-list-card .upi-info strong { display: block; font-size: 0.88rem; color: #fff; word-break: break-all; }
+        .upi-list-card .upi-info small { font-size: 0.72rem; color: var(--text-muted); display: block; margin-top: 2px; }
+        .upi-list-card .upi-actions { display: flex; align-items: center; gap: 8px; flex-shrink: 0; }
+
+        .toggle-switch { position: relative; display: inline-block; width: 42px; height: 24px; flex-shrink: 0; }
+        .toggle-switch input { opacity: 0; width: 0; height: 0; }
+        .toggle-slider { position: absolute; cursor: pointer; top: 0; left: 0; right: 0; bottom: 0; background-color: rgba(255, 255, 255, 0.2); transition: 0.3s; border-radius: 24px; }
+        .toggle-slider:before { position: absolute; content: ""; height: 18px; width: 18px; left: 3px; bottom: 3px; background-color: white; transition: 0.3s; border-radius: 50%; }
+        .toggle-switch input:checked + .toggle-slider { background-color: var(--success); }
+        .toggle-switch input:checked + .toggle-slider:before { transform: translateX(18px); }
+
+        .upi-select-list { display: flex; flex-direction: column; gap: 8px; margin: 12px 0; }
+        .upi-select-item { background: rgba(255, 255, 255, 0.06); border: 2px solid var(--glass-border); border-radius: 10px; padding: 10px 12px; cursor: pointer; display: flex; align-items: center; gap: 10px; transition: var(--transition); }
+        .upi-select-item:hover { border-color: var(--brand-orange); background: rgba(255, 153, 51, 0.1); }
+        .upi-select-item.selected { border-color: var(--success); background: rgba(46, 204, 113, 0.12); }
+        .upi-select-item .icon-wrap { width: 34px; height: 34px; border-radius: 8px; display: flex; align-items: center; justify-content: center; background: linear-gradient(135deg, var(--brand-orange), #e68529); color: #fff; flex-shrink: 0; font-size: 0.95rem; }
+        .upi-select-item .txt-wrap { flex: 1; min-width: 0; }
+        .upi-select-item .txt-wrap strong { display: block; font-size: 0.85rem; color: #fff; word-break: break-all; }
+        .upi-select-item .txt-wrap small { font-size: 0.7rem; color: var(--text-muted); }
+        .upi-select-item .check-icon { color: var(--success); font-size: 1.1rem; display: none; }
+        .upi-select-item.selected .check-icon { display: block; }
+
+        .sell-note-badge { display: inline-flex; align-items: center; gap: 4px; background: rgba(255, 153, 51, 0.15); border: 1px solid var(--brand-orange); color: var(--brand-orange); font-size: 0.65rem; font-weight: 700; padding: 2px 8px; border-radius: 6px; text-transform: uppercase; letter-spacing: 0.5px; }
+
+        .sell-range-info { background: rgba(255, 153, 51, 0.12); border: 1px solid rgba(255, 153, 51, 0.35); border-radius: 10px; padding: 10px 12px; font-size: 0.78rem; color: var(--text-muted); margin-bottom: 12px; line-height: 1.5; }
+        .sell-range-info strong { color: var(--brand-orange); }
+
+        .ref-bonus-track { background: rgba(255,255,255,0.1); height: 10px; border-radius: 5px; overflow: hidden; margin-top: 8px; }
+        .ref-bonus-fill { height: 100%; background: linear-gradient(90deg, var(--success), var(--brand-yellow)); border-radius: 5px; transition: width 0.4s; }
+
+        .today-earning-summary { background: linear-gradient(135deg, rgba(46, 204, 113, 0.2), rgba(255, 193, 7, 0.12)); border: 1px solid rgba(46, 204, 113, 0.4); border-radius: 12px; padding: 18px; text-align: center; margin-bottom: 15px; }
+        .today-earning-summary .te-label { font-size: 0.72rem; color: var(--text-muted); text-transform: uppercase; letter-spacing: 1px; }
+        .today-earning-summary .te-value { font-size: 2rem; font-weight: 800; color: var(--success); margin: 6px 0; }
+        .today-earning-summary .te-sub { font-size: 0.72rem; color: var(--text-muted); }
+        .te-order-item { background: rgba(10, 25, 47, 0.7); border: 1px solid var(--glass-border); border-radius: 10px; padding: 12px; margin-bottom: 8px; display: flex; justify-content: space-between; align-items: center; gap: 10px; }
+        .te-order-item .te-order-info { flex: 1; min-width: 0; }
+        .te-order-item .te-order-info strong { display: block; font-size: 0.85rem; color: #fff; word-break: break-all; }
+        .te-order-item .te-order-info small { font-size: 0.7rem; color: var(--text-muted); display: block; margin-top: 2px; }
+        .te-order-item .te-order-earn { font-size: 0.9rem; font-weight: 800; color: var(--success); flex-shrink: 0; }
+        .te-order-item .te-order-earn.zero { color: var(--text-muted); }
+
+        /* APK DOWNLOAD BANNER */
+        .apk-download-banner { background: linear-gradient(135deg, rgba(0, 102, 204, 0.35), rgba(255, 153, 51, 0.25)); border: 1px solid rgba(255, 153, 51, 0.5); border-radius: 14px; padding: 14px 16px; margin-bottom: 15px; display: flex; align-items: center; justify-content: space-between; gap: 12px; position: relative; overflow: hidden; }
+        .apk-download-banner::before { content: ''; position: absolute; top: -40%; right: -10%; width: 120px; height: 120px; background: radial-gradient(circle, rgba(255, 153, 51, 0.25), transparent 70%); border-radius: 50%; pointer-events: none; }
+        .apk-banner-left { display: flex; align-items: center; gap: 12px; flex: 1; min-width: 0; }
+        .apk-banner-icon { width: 44px; height: 44px; border-radius: 12px; background: linear-gradient(135deg, #0066cc, #004999); color: #fff; display: flex; align-items: center; justify-content: center; font-size: 1.4rem; flex-shrink: 0; box-shadow: 0 4px 12px rgba(0, 102, 204, 0.4); }
+        .apk-banner-text { display: flex; flex-direction: column; gap: 2px; min-width: 0; }
+        .apk-banner-text h5 { font-size: 0.9rem; font-weight: 700; color: #fff; }
+        .apk-banner-text p { font-size: 0.72rem; color: var(--text-muted); }
+        .apk-banner-right { display: flex; align-items: center; gap: 8px; flex-shrink: 0; }
+        .btn-apk-download { background: linear-gradient(135deg, #0066cc, #004999); color: #fff; border: none; padding: 9px 16px; border-radius: 10px; font-size: 0.8rem; font-weight: 700; cursor: pointer; display: flex; align-items: center; gap: 6px; box-shadow: 0 4px 12px rgba(0, 102, 204, 0.4); transition: var(--transition); white-space: nowrap; }
+        .btn-apk-download:hover { transform: translateY(-2px); box-shadow: 0 6px 16px rgba(0, 102, 204, 0.55); }
+        .btn-apk-close { background: rgba(255,255,255,0.1); border: 1px solid var(--glass-border); color: var(--text-muted); width: 28px; height: 28px; border-radius: 50%; display: flex; align-items: center; justify-content: center; cursor: pointer; font-size: 0.85rem; transition: var(--transition); flex-shrink: 0; }
+        .btn-apk-close:hover { background: rgba(231, 76, 60, 0.3); color: #fff; border-color: #e74c3c; }
+
+        .apk-profile-item { border: 1px solid rgba(0, 102, 204, 0.4); background: rgba(0, 102, 204, 0.15); border-radius: 10px; margin-bottom: 10px; padding-left: 12px; padding-right: 12px; }
+    </style>
+</head>
+<body>
+
+<div class="app-loader" id="appLoader">
+    <div id="loaderLogoContainer"><i class="fa-solid fa-chart-line" style="font-size:3rem; color:var(--brand-orange);"></i></div>
+    <p>Loading Maha Sell...</p>
+</div>
+
+<div class="blocked-screen" id="blockedScreen">
+    <div class="blocked-card">
+        <i class="fa-solid fa-ban blocked-icon"></i>
+        <h2>Account Blocked</h2>
+        <p>Aapka account admin dwara block kar diya gaya hai. Kripya customer support se sampark karein.</p>
+        <button class="btn btn-danger" onclick="handleLogout()"><i class="fa-solid fa-right-from-bracket"></i> Logout</button>
+    </div>
+</div>
+
+<div class="auth-screen" id="signupScreen">
+    <div class="auth-card">
+        <div class="auth-logo">
+            <div id="signupLogoContainer"><i class="fa-solid fa-store" style="font-size: 3rem; color: var(--brand-orange);"></i></div>
+            <h1>Maha Sell</h1>
+            <div class="brand-sub">Trade & Earning Portal</div>
+            <p>Create your account & start earning</p>
+        </div>
+        <div class="auth-title">Sign Up</div>
+        <div class="auth-error" id="signupError"></div>
+        <div class="auth-field"><i class="fa-solid fa-user field-icon"></i><input type="text" id="signupName" placeholder="Full Name"></div>
+        <div class="auth-field"><i class="fa-solid fa-envelope field-icon"></i><input type="email" id="signupEmail" placeholder="Email Address"></div>
+        <div class="auth-field"><i class="fa-solid fa-lock field-icon"></i><input type="password" id="signupPassword" placeholder="Password (min 6 characters)"><i class="fa-solid fa-eye toggle-pass" onclick="togglePassword('signupPassword', this)"></i></div>
+        <div class="auth-field"><i class="fa-solid fa-lock field-icon"></i><input type="password" id="signupConfirmPassword" placeholder="Confirm Password"><i class="fa-solid fa-eye toggle-pass" onclick="togglePassword('signupConfirmPassword', this)"></i></div>
+        <div class="auth-field"><i class="fa-solid fa-user-group field-icon"></i><input type="text" id="signupReferralCode" placeholder="Referral Code (optional)" style="text-transform: uppercase;"></div>
+        <div class="terms-box">
+            <input type="checkbox" id="agreeTerms">
+            <label for="agreeTerms">I agree to the <a onclick="openLegalPage('terms')">Terms & Conditions</a> and <a onclick="openLegalPage('privacy')">Privacy Policy</a> of Maha Sell.</label>
+        </div>
+        <button class="auth-btn" id="signupBtn" onclick="handleSignup()"><i class="fa-solid fa-user-plus"></i> Create Account</button>
+        <div class="auth-loader" id="signupLoader"><i class="fa-solid fa-spinner fa-spin"></i> Creating your account...</div>
+        <div class="auth-switch">Already have an account? <a onclick="showScreen('loginScreen')">Login</a></div>
+    </div>
+</div>
+
+<div class="auth-screen" id="loginScreen">
+    <div class="auth-card">
+        <div class="auth-logo">
+            <div id="loginLogoContainer"><i class="fa-solid fa-store" style="font-size: 3rem; color: var(--brand-orange);"></i></div>
+            <h1>Maha Sell</h1>
+            <div class="brand-sub">Trade & Earning Portal</div>
+            <p>Welcome back! Login to continue</p>
+        </div>
+        <div class="auth-title">Login</div>
+        <div class="auth-error" id="loginError"></div>
+        <div class="auth-field"><i class="fa-solid fa-envelope field-icon"></i><input type="email" id="loginEmail" placeholder="Email Address"></div>
+        <div class="auth-field"><i class="fa-solid fa-lock field-icon"></i><input type="password" id="loginPassword" placeholder="Password"><i class="fa-solid fa-eye toggle-pass" onclick="togglePassword('loginPassword', this)"></i></div>
+        <div class="auth-options"><span></span><a onclick="handleForgotPassword()">Forgot Password?</a></div>
+        <button class="auth-btn" id="loginBtn" onclick="handleLogin()"><i class="fa-solid fa-right-to-bracket"></i> Login</button>
+        <div class="auth-loader" id="loginLoader"><i class="fa-solid fa-spinner fa-spin"></i> Logging in...</div>
+        <div class="auth-switch">Don't have an account? <a onclick="showScreen('signupScreen')">Sign Up</a></div>
+    </div>
+</div>
+
+<header class="header" id="mainHeader" style="display:none;">
+    <div class="logo">
+        <div id="headerLogoContainer"><i class="fa-solid fa-store" style="color: var(--brand-orange); font-size: 1.5rem;"></i></div>
+        <div class="logo-text-wrap">
+            <span class="logo-text">Maha Sell</span>
+            <span class="logo-tagline">TRADE PORTAL</span>
+        </div>
+    </div>
+    <div class="header-actions"></div>
+</header>
+
+<main class="container" id="mainContainer" style="display:none;">
+
+    <section id="home" class="section active">
+        <div id="broadcastContainer"></div>
+        <div id="bannerSliderContainer"></div>
+
+        <!-- APK DOWNLOAD BANNER (dismissible) -->
+        <div class="apk-download-banner" id="apkDownloadBanner">
+            <div class="apk-banner-left">
+                <div class="apk-banner-icon"><i class="fa-brands fa-android"></i></div>
+                <div class="apk-banner-text">
+                    <h5>Download Maha Sell App</h5>
+                    <p>Fast &amp; easy trading on the go</p>
+                </div>
+            </div>
+            <div class="apk-banner-right">
+                <button class="btn-apk-download" onclick="downloadAPK()"><i class="fa-solid fa-download"></i> APK</button>
+                <button class="btn-apk-close" onclick="dismissApkBanner()" title="Hide"><i class="fa-solid fa-times"></i></button>
+            </div>
+        </div>
+
+        <div class="welcome-card">
+            <img id="welcomeAvatarImg" class="welcome-avatar" src="" alt="User Avatar">
+            <div class="welcome-text-wrap">
+                <div class="welcome-label">Welcome back</div>
+                <div class="welcome-name" id="welcomeName">User <span class="online-dot"></span></div>
+            </div>
+        </div>
+
+        <div class="card banner-card">
+            <div class="balance-sell-row">
+                <div class="balance-info">
+                    <div class="balance-label">Trading Wallet Balance</div>
+                    <div class="balance-amount">₹ <span id="userBalance">0.00</span></div>
+                </div>
+                <button class="btn-sell-main" id="mainSellBtn" onclick="openSellModal()"><i class="fa-solid fa-arrow-up-from-bracket"></i> SELL</button>
+            </div>
+        </div>
+
+        <div class="saved-upi-card" id="homeUpiCard">
+            <div>
+                <div style="font-size: 0.75rem; color: var(--text-muted); text-transform: uppercase;">Primary Active UPI</div>
+                <div style="font-size: 0.95rem; font-weight: 600; color: #fff;" id="homeUpiDisplay">No UPI ID Bound Yet</div>
+            </div>
+            <button class="btn-claim" onclick="switchTab('profile', document.querySelectorAll('.nav-item')[4]); setTimeout(()=>openModal('addUpiModal'), 300);"><i class="fa-solid fa-pen-to-square"></i> Manage</button>
+        </div>
+
+        <div class="card" style="background: linear-gradient(135deg, rgba(255, 153, 51, 0.3), rgba(10, 25, 47, 0.6)); text-align: center;">
+            <div style="font-size: 0.8rem; color: var(--text-muted); text-transform: uppercase;">Commission Status</div>
+            <div style="font-size: 1.6rem; font-weight: 700; color: var(--brand-orange); margin-top: 2px;">Up to 12% Commission</div>
+        </div>
+
+        <div class="stats-grid">
+            <div class="stat-card"><div class="stat-label">Total Amount</div><div class="stat-value" id="statTotalAmount">₹0.00</div></div>
+            <div class="stat-card"><div class="stat-label">Total Earning</div><div class="stat-value" id="statTotalEarning">₹0.00</div></div>
+            <div class="stat-card"><div class="stat-label">Total Sell</div><div class="stat-value" id="totalSellCount">0 Items</div></div>
+            <div class="stat-card"><div class="stat-label">Total Buy</div><div class="stat-value" id="totalBuyCount">0 Items</div></div>
+        </div>
+
+        <div class="section-title" style="margin-top: 25px;">
+            <span><i class="fa-solid fa-gift"></i> Extra Bonus Rewards</span>
+            <span style="font-size: 0.75rem; color: var(--brand-orange);">Daily Active</span>
+        </div>
+        <div class="bonus-card">
+            <div class="bonus-info">
+                <div class="bonus-icon"><i class="fa-solid fa-calendar-check"></i></div>
+                <div class="bonus-text"><h5>Daily Login Bonus</h5><p>Claim ₹<span id="dailyBonusAmount">10</span> reward once a day</p></div>
+            </div>
+            <button class="btn-claim" id="dailyBonusBtn" onclick="claimDailyBonus()">Claim</button>
+        </div>
+
+        <div class="section-title" style="margin-top: 15px; font-size: 0.95rem;">
+            <span><i class="fa-solid fa-trophy"></i> Daily Milestone Rewards</span>
+            <span style="font-size: 0.72rem; color: var(--text-muted);">Resets daily</span>
+        </div>
+
+        <div class="milestone-card">
+            <div class="milestone-header"><span class="milestone-title">10 Orders Complete</span><span class="milestone-reward">+₹<span id="ms10RewardVal">15</span></span></div>
+            <div class="milestone-progress-track"><div class="milestone-progress-fill" id="ms10Fill" style="width:0%"></div></div>
+            <div class="milestone-count" id="ms10Count">0 / 10</div>
+            <button class="btn-claim" id="ms10Btn" style="width:100%; margin-top:8px;" onclick="claimMilestone(10)">Claim</button>
+        </div>
+        <div class="milestone-card">
+            <div class="milestone-header"><span class="milestone-title">30 Orders Complete</span><span class="milestone-reward">+₹<span id="ms30RewardVal">50</span></span></div>
+            <div class="milestone-progress-track"><div class="milestone-progress-fill" id="ms30Fill" style="width:0%"></div></div>
+            <div class="milestone-count" id="ms30Count">0 / 30</div>
+            <button class="btn-claim" id="ms30Btn" style="width:100%; margin-top:8px;" onclick="claimMilestone(30)">Claim</button>
+        </div>
+        <div class="milestone-card">
+            <div class="milestone-header"><span class="milestone-title">100 Orders Complete</span><span class="milestone-reward">+₹<span id="ms100RewardVal">150</span></span></div>
+            <div class="milestone-progress-track"><div class="milestone-progress-fill" id="ms100Fill" style="width:0%"></div></div>
+            <div class="milestone-count" id="ms100Count">0 / 100</div>
+            <button class="btn-claim" id="ms100Btn" style="width:100%; margin-top:8px;" onclick="claimMilestone(100)">Claim</button>
+        </div>
+
+        <div class="bonus-card" style="margin-top: 15px;">
+            <div class="bonus-info">
+                <div class="bonus-icon"><i class="fa-solid fa-ticket"></i></div>
+                <div class="bonus-text"><h5>Redeem Gift Code</h5><p>Get codes from our Telegram channel</p></div>
+            </div>
+            <button class="btn-claim" onclick="openGiftCodeModal()">Redeem</button>
+        </div>
+        <div class="gift-code-hint">
+            <i class="fa-brands fa-telegram"></i>
+            <span>Gift codes milte hain hamare Telegram channel se. Join karke codes receive karein!</span>
+        </div>
+    </section>
+
+    <section id="orders" class="section">
+        <div class="section-title">
+            <span><i class="fa-solid fa-cart-shopping"></i> Live Trade Slots</span>
+            <span style="font-size: 0.75rem; color: var(--text-muted);" id="slotCount">0 Slots Available</span>
+        </div>
+        <div class="orders-grid" id="ordersGridContainer">
+            <div class="empty-state"><i class="fa-solid fa-spinner fa-spin"></i><p>Loading slots...</p></div>
+        </div>
+    </section>
+
+    <section id="buyHistory" class="section">
+        <div class="section-title">
+            <span><i class="fa-solid fa-cart-flatbed"></i> Buy History</span>
+            <span style="font-size: 0.75rem; color: var(--brand-orange);" id="buyHistoryCount">0 Orders</span>
+        </div>
+        <div id="buyHistoryContainer">
+            <div class="card" style="text-align: center;">
+                <i class="fa-solid fa-inbox" style="font-size: 2rem; color: var(--text-muted); opacity:0.5;"></i>
+                <p style="color: var(--text-muted); font-size: 0.85rem; margin-top: 10px;">Abhi tak koi buy order nahi kiya.</p>
+            </div>
+        </div>
+    </section>
+
+    <section id="sellHistory" class="section">
+        <div class="section-title">
+            <span><i class="fa-solid fa-boxes-packing"></i> Sell History</span>
+            <span style="font-size: 0.75rem; color: var(--brand-orange);" id="sellHistoryCount">0 Orders</span>
+        </div>
+        <div id="sellHistoryContainer">
+            <div class="card" style="text-align: center;">
+                <i class="fa-solid fa-inbox" style="font-size: 2rem; color: var(--text-muted); opacity:0.5;"></i>
+                <p style="color: var(--text-muted); font-size: 0.85rem; margin-top: 10px;">Abhi tak koi sell request nahi ki. Apne balance se sell karne ke liye Home page par SELL button dabayein.</p>
+            </div>
+        </div>
+    </section>
+
+    <section id="referral" class="section">
+        <div class="section-title">
+            <span><i class="fa-solid fa-users-viewfinder"></i> Invite Friends & Earn</span>
+        </div>
+
+        <div class="referral-stats-grid">
+            <div class="referral-stat-card">
+                <div class="referral-stat-icon"><i class="fa-solid fa-user-group"></i></div>
+                <div class="referral-stat-value" id="totalReferrals">0</div>
+                <div class="referral-stat-label">Total Referrals</div>
+            </div>
+            <div class="referral-stat-card">
+                <div class="referral-stat-icon"><i class="fa-solid fa-hand-holding-dollar"></i></div>
+                <div class="referral-stat-value" id="totalReferralCommission">₹0.00</div>
+                <div class="referral-stat-label">Referral Commission</div>
+            </div>
+        </div>
+
+        <div class="card" style="text-align: center;">
+            <div id="refEligibilityBanner" style="background: rgba(255, 153, 51, 0.15); border: 1px solid var(--brand-orange); padding: 10px; border-radius: 8px; font-size: 0.8rem; margin-bottom: 15px; color: var(--brand-orange);">
+                <i class="fa-solid fa-circle-info"></i> Complete 25 orders to become eligible for referral sharing.
+            </div>
+
+            <p style="font-size: 0.85rem; color: var(--text-muted); line-height: 1.5;">
+                Per user refer karein. Jab aapka referred user <strong>10 orders complete</strong> karega, tab aapko <strong>₹300 ka referral bonus</strong> instant wallet mein milega!
+            </p>
+
+            <div class="refer-box">
+                <div style="font-size: 0.8rem; text-transform: uppercase; color: var(--text-muted);">Your Exclusive Referral Code</div>
+                <div class="refer-code" id="myReferralCode">------</div>
+            </div>
+
+            <button class="btn btn-primary" id="copyReferralBtn" onclick="copyReferral()" style="margin-bottom: 15px;" disabled>
+                <i class="fa-solid fa-lock"></i> <span id="copyReferralBtnText">Locked - Complete 25 Orders</span>
+            </button>
+
+            <div style="font-size: 0.85rem; font-weight: 600; color: var(--text-muted); margin-bottom: 10px; text-align: left;">Share directly via:</div>
+            <div class="social-grid">
+                <button class="social-btn btn-whatsapp" onclick="shareSocial('whatsapp')"><i class="fa-brands fa-whatsapp"></i> WhatsApp</button>
+                <button class="social-btn btn-telegram" onclick="shareSocial('telegram')"><i class="fa-brands fa-telegram"></i> Telegram</button>
+                <button class="social-btn btn-facebook" onclick="shareSocial('facebook')"><i class="fa-brands fa-facebook-f"></i> Facebook</button>
+                <button class="social-btn btn-instagram" onclick="shareSocial('instagram')"><i class="fa-brands fa-instagram"></i> Instagram</button>
+            </div>
+        </div>
+
+        <div class="card">
+            <div class="section-title" style="font-size: 0.95rem; margin-bottom: 12px;">
+                <span><i class="fa-solid fa-list-check"></i> My Referred Users</span>
+                <span style="font-size: 0.72rem; color: var(--brand-orange);" id="referredUsersCount">0 Users</span>
+            </div>
+            <div id="referredUsersContainer">
+                <div class="empty-state" style="padding: 20px;">
+                    <i class="fa-solid fa-user-plus"></i>
+                    <p style="font-size: 0.8rem;">Abhi tak kisi ko refer nahi kiya. Apna code share karein!</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section id="profile" class="section">
+        <div class="section-title"><span><i class="fa-solid fa-id-card"></i> User Profile & Settings</span></div>
+
+        <div class="user-profile-header">
+            <div class="user-avatar" id="profileAvatarContainer"><img id="profileAvatarImg" src="" alt="Avatar"></div>
+            <div class="user-info">
+                <div class="user-name" id="profileName">Loading...</div>
+                <div class="user-email" id="profileEmail">Loading...</div>
+                <div class="user-uid-badge"><i class="fa-solid fa-hashtag"></i> <span id="profileUid">---</span></div>
+            </div>
+        </div>
+
+        <div class="card">
+            <div class="list-item" onclick="openTodayEarningModal()">
+                <div class="list-item-left"><i class="fa-solid fa-chart-line"></i> Today Earning</div>
+                <div class="list-item-right">
+                    <span class="list-item-value" id="profileTodayEarning">₹0.00</span>
+                    <i class="fa-solid fa-chevron-right" style="font-size: 0.8rem; color: var(--text-muted);"></i>
+                </div>
+            </div>
+            <div class="list-item" onclick="openModal('addUpiModal')">
+                <div class="list-item-left"><i class="fa-solid fa-wallet"></i> My UPI IDs (<span id="upiCountBadge">0</span>)</div>
+                <i class="fa-solid fa-chevron-right" style="font-size: 0.8rem; color: var(--text-muted);"></i>
+            </div>
+            <div class="list-item" onclick="switchTab('buyHistory', document.querySelectorAll('.nav-item')[1])">
+                <div class="list-item-left"><i class="fa-solid fa-cart-flatbed"></i> Buy History</div>
+                <i class="fa-solid fa-chevron-right" style="font-size: 0.8rem; color: var(--text-muted);"></i>
+            </div>
+            <div class="list-item" onclick="switchTab('sellHistory', document.querySelectorAll('.nav-item')[1])">
+                <div class="list-item-left"><i class="fa-solid fa-boxes-packing"></i> Sell History</div>
+                <i class="fa-solid fa-chevron-right" style="font-size: 0.8rem; color: var(--text-muted);"></i>
+            </div>
+
+            <!-- APK DOWNLOAD PROFILE OPTION -->
+            <div class="list-item apk-profile-item" onclick="downloadAPK()">
+                <div class="list-item-left">
+                    <i class="fa-brands fa-android" style="color: #0066cc;"></i>
+                    <span style="font-weight: 600;">Download APK <span style="font-size:0.7rem;color:var(--info);">(Mobile App)</span></span>
+                </div>
+                <i class="fa-solid fa-download" style="font-size: 0.9rem; color: #0066cc;"></i>
+            </div>
+
+            <div class="list-item" onclick="openSupportLink()">
+                <div class="list-item-left"><i class="fa-solid fa-headset"></i> Customer Support</div>
+                <i class="fa-solid fa-chevron-right" style="font-size: 0.8rem; color: var(--text-muted);"></i>
+            </div>
+            <div class="list-item" onclick="openLegalPage('terms')">
+                <div class="list-item-left"><i class="fa-solid fa-file-contract"></i> Terms of Condition</div>
+                <i class="fa-solid fa-chevron-right" style="font-size: 0.8rem; color: var(--text-muted);"></i>
+            </div>
+            <div class="list-item" onclick="openLegalPage('privacy')">
+                <div class="list-item-left"><i class="fa-solid fa-user-shield"></i> Privacy Policy</div>
+                <i class="fa-solid fa-chevron-right" style="font-size: 0.8rem; color: var(--text-muted);"></i>
+            </div>
+            <div class="list-item" onclick="handleLogout()" style="color: #ff5252;">
+                <div class="list-item-left"><i class="fa-solid fa-right-from-bracket" style="color: #ff5252;"></i> Logout</div>
+                <i class="fa-solid fa-chevron-right" style="font-size: 0.8rem; color: #ff5252;"></i>
+            </div>
+        </div>
+    </section>
+
+</main>
+
+<nav class="bottom-nav" id="mainNav" style="display:none;">
+    <button class="nav-item active" onclick="switchTab('home', this)"><i class="fa-solid fa-house"></i><span>Home</span></button>
+    <button class="nav-item" onclick="switchTab('orders', this)"><i class="fa-solid fa-receipt"></i><span>Buy</span></button>
+    <button class="nav-plus-btn" onclick="openModal('addUpiModal')" title="Manage UPI IDs"><i class="fa-solid fa-plus"></i></button>
+    <button class="nav-item" onclick="switchTab('referral', this)"><i class="fa-solid fa-share-nodes"></i><span>Referral</span></button>
+    <button class="nav-item" onclick="switchTab('profile', this)"><i class="fa-solid fa-user"></i><span>Profile</span></button>
+</nav>
+
+<div id="addUpiModal" class="modal" onclick="closeModalOnOutside(event, 'addUpiModal')">
+    <div class="modal-content">
+        <div class="modal-header">
+            <h3><i class="fa-solid fa-wallet" style="color: var(--brand-orange);"></i> Manage UPI IDs</h3>
+            <button class="close-btn" onclick="closeModal('addUpiModal')">&times;</button>
+        </div>
+        <div style="font-size: 0.85rem; font-weight: 600; color: var(--brand-orange); margin-bottom: 8px;"><i class="fa-solid fa-list"></i> Your Bound UPI IDs</div>
+        <div id="upiListContainer" style="margin-bottom: 16px;">
+            <div class="empty-state" style="padding: 20px;">
+                <i class="fa-solid fa-wallet"></i>
+                <p style="font-size: 0.8rem;">Koi UPI ID bind nahi hai. Neeche se add karein.</p>
+            </div>
+        </div>
+        <hr style="border: none; border-top: 1px solid rgba(255,255,255,0.1); margin: 15px 0;">
+        <div style="font-size: 0.85rem; font-weight: 600; color: var(--brand-orange); margin-bottom: 8px;"><i class="fa-solid fa-plus"></i> Add New UPI ID</div>
+        <label style="font-size: 0.82rem; font-weight: 500; color: var(--text-muted);">Choose UPI Platform:</label>
+        <div class="upi-app-grid">
+            <div class="upi-app-card selected" onclick="selectUpiApp(this, 'Paytm', '@paytm')"><i class="fa-solid fa-bolt" style="color: #00baf2;"></i><span class="upi-app-name">Paytm</span></div>
+            <div class="upi-app-card" onclick="selectUpiApp(this, 'PhonePe', '@ybl')"><i class="fa-solid fa-mobile-screen-button" style="color: #5f259f;"></i><span class="upi-app-name">PhonePe</span></div>
+            <div class="upi-app-card" onclick="selectUpiApp(this, 'Google Pay', '@okaxis')"><i class="fa-brands fa-google" style="color: #4285F4;"></i><span class="upi-app-name">Google Pay</span></div>
+            <div class="upi-app-card" onclick="selectUpiApp(this, 'Navi App', '@navi')"><i class="fa-solid fa-compass" style="color: #00d285;"></i><span class="upi-app-name">Navi</span></div>
+            <div class="upi-app-card" onclick="selectUpiApp(this, 'Custom UPI', '')" style="grid-column: span 2;"><i class="fa-solid fa-gear" style="color: var(--brand-orange);"></i><span class="upi-app-name">Custom UPI Handle</span></div>
+        </div>
+        <div class="input-group">
+            <label id="upiInputLabel">Enter Paytm UPI ID</label>
+            <input type="text" id="upiIdInput" placeholder="e.g. 9876543210@paytm">
+        </div>
+        <button class="btn btn-primary" onclick="addNewUpi()"><i class="fa-solid fa-plus"></i> Add UPI ID</button>
+    </div>
+</div>
+
+<div id="paymentModal" class="modal" onclick="closeModalOnOutside(event, 'paymentModal')">
+    <div class="modal-content">
+        <div class="modal-header">
+            <h3><i class="fa-solid fa-credit-card" style="color: var(--brand-orange);"></i> Complete Payment</h3>
+            <button class="close-btn" onclick="closeModal('paymentModal')">&times;</button>
+        </div>
+        <div class="pay-amount-display">
+            <div class="lbl">Amount to Pay</div>
+            <div class="amt" id="payAmountDisplay">₹0.00</div>
+            <div style="font-size:0.72rem;color:var(--text-muted);margin-top:4px;">Order Range: <span id="payRangeDisplay">-</span></div>
+        </div>
+        <div style="font-size: 0.85rem; font-weight: 600; color: var(--brand-orange); margin-bottom: 8px;"><i class="fa-solid fa-hand-pointer"></i> Select UPI to Pay From</div>
+        <p style="font-size: 0.75rem; color: var(--text-muted); margin-bottom: 8px;">Aap kis UPI ID se payment kar rahe hain, usse select karein.</p>
+        <div class="upi-select-list" id="upiSelectList">
+            <div class="empty-state" style="padding: 15px;">
+                <i class="fa-solid fa-exclamation-circle" style="color: var(--warning);"></i>
+                <p style="font-size: 0.8rem;">Aapne koi UPI bind nahi kiya hai. Kripya pehle UPI add karein.</p>
+                <button class="btn btn-primary" style="margin-top: 10px; max-width: 200px; margin-left: auto; margin-right: auto;" onclick="closeModal('paymentModal'); openModal('addUpiModal');"><i class="fa-solid fa-plus"></i> Add UPI Now</button>
+            </div>
+        </div>
+        <div class="admin-upi-box">
+            <div class="admin-upi-label">Admin UPI ID (Payment Karo)</div>
+            <div class="admin-upi-value" id="adminUpiValue">Loading...</div>
+            <button class="copy-btn" onclick="copyAdminUpi()"><i class="fa-solid fa-copy"></i> Copy UPI ID</button>
+        </div>
+        <div class="utr-info-box">
+            <i class="fa-solid fa-triangle-exclamation"></i>
+            <div><strong>Important:</strong> Sirf asli payment ka UTR aur real screenshot submit karein. Fake UTR ya duplicate screenshot detect hone par account block ho jayega.</div>
+        </div>
+        <div class="input-group">
+            <label><i class="fa-solid fa-receipt"></i> UTR / Transaction ID <span style="color:#ff5252;">*</span></label>
+            <input type="text" id="utrInput" placeholder="12-digit UTR number daalein" maxlength="24" autocomplete="off">
+            <div id="utrValidationMsg" style="font-size:0.72rem; margin-top:4px; display:none;"></div>
+        </div>
+        <div class="input-group">
+            <label><i class="fa-solid fa-image"></i> Payment Screenshot <span style="color:#ff5252;">*</span></label>
+            <div class="file-upload-box" id="fileUploadBox">
+                <input type="file" id="screenshotInput" accept="image/*" onchange="handleScreenshot(event)">
+                <i class="fa-solid fa-cloud-arrow-up"></i>
+                <p>Click to upload screenshot</p>
+                <div class="file-name" id="fileNameDisplay"></div>
+                <img id="screenshotPreview" class="upload-preview" style="display:none;">
+            </div>
+        </div>
+        <button class="btn btn-primary" id="submitOrderBtn" onclick="submitOrderWithPayment()" style="margin-top: 10px;"><i class="fa-solid fa-paper-plane"></i> Submit Payment</button>
+    </div>
+</div>
+
+<div id="sellModal" class="modal" onclick="closeModalOnOutside(event, 'sellModal')">
+    <div class="modal-content">
+        <div class="modal-header">
+            <h3><i class="fa-solid fa-arrow-up-from-bracket" style="color: var(--success);"></i> Sell Balance</h3>
+            <button class="close-btn" onclick="closeModal('sellModal')">&times;</button>
+        </div>
+        <div class="pay-amount-display" style="background: rgba(46, 204, 113, 0.15); border-color: var(--success);">
+            <div class="lbl">Available Balance</div>
+            <div class="amt" id="sellAvailableBalance">₹0.00</div>
+        </div>
+        <div style="font-size: 0.85rem; font-weight: 600; color: var(--brand-orange); margin-bottom: 8px;"><i class="fa-solid fa-hand-pointer"></i> Select UPI to Receive Payment</div>
+        <p style="font-size: 0.75rem; color: var(--text-muted); margin-bottom: 8px;">Aap kis UPI ID par paise receive karna chahte hain, usse select karein.</p>
+        <div class="upi-select-list" id="sellUpiSelectList">
+            <div class="empty-state" style="padding: 15px;">
+                <i class="fa-solid fa-exclamation-circle" style="color: var(--warning);"></i>
+                <p style="font-size: 0.8rem;">Koi active UPI nahi hai. Kripya pehle UPI add karein.</p>
+                <button class="btn btn-primary" style="margin-top: 10px; max-width: 200px; margin-left: auto; margin-right: auto;" onclick="closeModal('sellModal'); openModal('addUpiModal');"><i class="fa-solid fa-plus"></i> Add UPI Now</button>
+            </div>
+        </div>
+        <div class="input-group">
+            <label><i class="fa-solid fa-indian-rupee-sign"></i> Amount to Sell <span style="color:#ff5252;">*</span></label>
+            <input type="number" id="sellAmountInput" placeholder="Enter amount (min ₹10)" min="10" step="1">
+            <div id="sellAmountMsg" style="font-size:0.72rem; margin-top:4px; display:none;"></div>
+        </div>
+        <div class="sell-range-info">
+            <i class="fa-solid fa-circle-info"></i> <strong>Note:</strong> Request submit karte hi amount aapke balance se turant kat jayega. Admin verify karke aapki UPI ID par transfer karega. Agar admin request reject karta hai to amount wapas balance mein add ho jayega.
+        </div>
+        <button class="btn btn-primary" id="submitSellBtn" onclick="submitSellRequest()" style="background: linear-gradient(135deg, #2ecc71, #27ae60);"><i class="fa-solid fa-paper-plane"></i> Submit Sell Request</button>
+    </div>
+</div>
+
+<div id="giftCodeModal" class="modal" onclick="closeModalOnOutside(event, 'giftCodeModal')">
+    <div class="modal-content">
+        <div class="modal-header">
+            <h3><i class="fa-solid fa-ticket" style="color: var(--brand-orange);"></i> Redeem Gift Code</h3>
+            <button class="close-btn" onclick="closeModal('giftCodeModal')">&times;</button>
+        </div>
+        <div class="gift-code-hint" style="margin-top:0;">
+            <i class="fa-brands fa-telegram"></i>
+            <span>Gift codes hamare <strong>Telegram channel</strong> par share hote hain. Wahan se receive karke yahan redeem karein!</span>
+        </div>
+        <div class="input-group" style="margin-top: 15px;">
+            <label>Enter Gift Code</label>
+            <input type="text" id="giftCodeInput" placeholder="e.g. MAHA50" style="text-transform: uppercase;">
+        </div>
+        <button class="btn btn-primary" onclick="redeemGiftCode()"><i class="fa-solid fa-gift"></i> Redeem Code</button>
+    </div>
+</div>
+
+<div id="todayEarningModal" class="modal" onclick="closeModalOnOutside(event, 'todayEarningModal')">
+    <div class="modal-content">
+        <div class="modal-header">
+            <h3><i class="fa-solid fa-chart-line" style="color: var(--success);"></i> Today's Earning</h3>
+            <button class="close-btn" onclick="closeModal('todayEarningModal')">&times;</button>
+        </div>
+        <div class="today-earning-summary">
+            <div class="te-label">Total Earning Today</div>
+            <div class="te-value" id="todayEarningTotal">₹0.00</div>
+            <div class="te-sub">Aaj ke approve hue orders ka profit</div>
+        </div>
+        <div style="font-size: 0.85rem; font-weight: 600; color: var(--brand-orange); margin-bottom: 8px;">
+            <i class="fa-solid fa-list"></i> Today's Orders (<span id="todayOrdersCount">0</span>)
+        </div>
+        <div id="todayEarningOrdersList">
+            <div class="empty-state" style="padding: 25px;">
+                <i class="fa-solid fa-inbox"></i>
+                <p style="font-size: 0.8rem;">Aaj koi order approve nahi hua.</p>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div id="profileDrawer" class="drawer" onclick="closeDrawerOnOutside(event, 'profileDrawer')">
+    <div class="drawer-content">
+        <div class="drawer-header">
+            <h3>Quick Profile</h3>
+            <button class="close-btn" onclick="closeDrawer('profileDrawer')">&times;</button>
+        </div>
+        <p><strong>Name:</strong> <span id="drawerName">-</span></p>
+        <p style="margin-top:3px;"><strong>Email:</strong> <span id="drawerEmail">-</span></p>
+        <p style="margin-top:3px;"><strong>UID:</strong> <span id="drawerUid">-</span></p>
+        <p style="margin-top:3px;"><strong>Primary UPI:</strong> <span id="drawerUpi">Not set</span></p>
+        <hr style="margin: 15px 0; border: none; border-top: 1px solid rgba(255, 255, 255, 0.1);">
+        <button class="btn btn-secondary" onclick="closeDrawer('profileDrawer'); switchTab('profile');" style="margin-bottom: 10px;">View Account</button>
+        <button class="btn btn-primary" onclick="handleLogout()">Logout</button>
+    </div>
+</div>
+
+<script type="module">
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
+    import {
+        getAuth, createUserWithEmailAndPassword, signInWithEmailAndPassword,
+        signOut, onAuthStateChanged, updateProfile, sendPasswordResetEmail
+    } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
+    import {
+        getFirestore, doc, setDoc, getDoc, updateDoc, collection,
+        addDoc, query, where, onSnapshot, serverTimestamp, increment, getDocs,
+        runTransaction, limit
+    } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
+
+    const firebaseConfig = {
+        apiKey: "AIzaSyAgiTaswWbgfny3xW-5uQHuENS2-tB82CI",
+        authDomain: "salling-app.firebaseapp.com",
+        projectId: "salling-app",
+        storageBucket: "salling-app.firebasestorage.app",
+        messagingSenderId: "567931417223",
+        appId: "1:567931417223:web:4682877289a6ed12133e22"
+    };
+
+    const app = initializeApp(firebaseConfig);
+    const auth = getAuth(app);
+    const db = getFirestore(app);
+
+    window.__fbAuth = auth;
+    window.__fbDb = db;
+    window.__fbFns = {
+        doc, setDoc, getDoc, updateDoc, collection, addDoc,
+        query, where, onSnapshot, serverTimestamp, increment, getDocs,
+        runTransaction, limit
+    };
+
+    window.__currentUser = null;
+    window.__userData = null;
+    window.__appSettings = {};
+    window.__unsubUserDoc = null;
+    window.__unsubSettings = null;
+    window.__slotsData = [];
+    window.__bannersData = [];
+    window.ADMIN_UPI_ID = 'mahasell@paytm';
+    window.__currentBannerIndex = 0;
+    window.__bannerAutoTimer = null;
+    window.userUpis = [];
+    window.__allUserOrders = [];
+    window.__sellRequests = [];
+    window.__referredUsers = [];
+    window.__broadcastMessage = '';
+
+    function fmtMoney(n) {
+        const num = parseFloat(n);
+        if (isNaN(num)) return '0.00';
+        return num.toFixed(2);
+    }
+    window.fmtMoney = fmtMoney;
+
+    // ============ DYNAMIC BASE URL (works on Hostinger & any host) ============
+    function getBaseUrl() {
+        try {
+            // Use current page location so referral link works on ANY host (Hostinger, Vercel, etc.)
+            let origin = window.location.origin + window.location.pathname;
+            // Strip query/hash and trailing index.html
+            origin = origin.split('?')[0].split('#')[0];
+            origin = origin.replace(/\/index\.html$/i, '');
+            origin = origin.replace(/\/$/, '');
+            return origin;
+        } catch (e) {
+            return window.location.origin || '';
+        }
+    }
+    window.getBaseUrl = getBaseUrl;
+
+    // ============ ANIME AVATAR ============
+    const ANIME_AVATAR_STYLES = [
+        'adventurer','adventurer-neutral','avataaars','avataaars-neutral',
+        'big-ears','big-ears-neutral','big-smile','bottts','bottts-neutral',
+        'croodles','croodles-neutral','fun-emoji','icons','identicon',
+        'initials','lorelei','lorelei-neutral','micah','miniavs',
+        'notionists','notionists-neutral','open-peeps','personas',
+        'pixel-art','pixel-art-neutral','thumbs'
+    ];
+
+    function hashString(str) {
+        let hash = 0; if (!str) return 0;
+        for (let i = 0; i < str.length; i++) {
+            const char = str.charCodeAt(i);
+            hash = ((hash << 5) - hash) + char;
+            hash = hash & hash;
+        }
+        return Math.abs(hash);
+    }
+
+    function getAnimeAvatarUrl(seedString) {
+        if (!seedString) seedString = 'mahasell-default';
+        const hash = hashString(seedString);
+        const style = ANIME_AVATAR_STYLES[hash % ANIME_AVATAR_STYLES.length];
+        return `https://api.dicebear.com/7.x/${style}/svg?seed=${encodeURIComponent(seedString)}&backgroundColor=ff9933,ffc107,2c5364,203a43`;
+    }
+    window.getAnimeAvatarUrl = getAnimeAvatarUrl;
+
+    function applyAvatarToUI(seedString) {
+        const url = getAnimeAvatarUrl(seedString);
+        const welcomeImg = document.getElementById('welcomeAvatarImg');
+        const profileImg = document.getElementById('profileAvatarImg');
+        if (welcomeImg) { welcomeImg.src = url; welcomeImg.onerror = function() { this.src = 'https://api.dicebear.com/7.x/adventurer/svg?seed=fallback&backgroundColor=ff9933'; }; }
+        if (profileImg) { profileImg.src = url; profileImg.onerror = function() { this.src = 'https://api.dicebear.com/7.x/adventurer/svg?seed=fallback&backgroundColor=ff9933'; }; }
+    }
+    window.applyAvatarToUI = applyAvatarToUI;
+
+    // ============ AUTH STATE ============
+    onAuthStateChanged(auth, async (user) => {
+        document.getElementById('appLoader').classList.add('hide');
+        if (window.__unsubUserDoc) { window.__unsubUserDoc(); window.__unsubUserDoc = null; }
+        if (window.__unsubSellRequests) { window.__unsubSellRequests(); window.__unsubSellRequests = null; }
+        if (window.__unsubReferrals) { window.__unsubReferrals(); window.__unsubReferrals = null; }
+
+        if (user) {
+            window.__currentUser = {
+                uid: user.uid,
+                name: user.displayName || (user.email ? user.email.split('@')[0] : 'User'),
+                email: user.email
+            };
+            startSettingsListener();
+            await loadBroadcast();
+            await ensureUserDoc(user);
+            startUserDocListener(user.uid);
+            startSlotsListener();
+            startOrdersListener(user.uid);
+            startBannersListener();
+            startSellRequestsListener(user.uid);
+            startReferralsListener(user.uid);
+            updateUserProfileUI(window.__currentUser);
+            applyLogoToUI();
+            applyAvatarToUI(user.uid);
+
+            document.getElementById('signupScreen').classList.remove('active');
+            document.getElementById('loginScreen').classList.remove('active');
+            document.getElementById('mainHeader').style.display = 'flex';
+            document.getElementById('mainContainer').style.display = 'block';
+            document.getElementById('mainNav').style.display = 'flex';
+        } else {
+            window.__currentUser = null;
+            window.__userData = null;
+            window.userUpis = [];
+            if (window.__unsubSettings) { window.__unsubSettings(); window.__unsubSettings = null; }
+            document.getElementById('mainHeader').style.display = 'none';
+            document.getElementById('mainContainer').style.display = 'none';
+            document.getElementById('mainNav').style.display = 'none';
+            document.getElementById('blockedScreen').classList.remove('show');
+            document.getElementById('loginScreen').classList.add('active');
+            document.getElementById('signupScreen').classList.remove('active');
+            await loadAppSettings();
+            await loadBroadcast();
+            applyLogoToUI();
+        }
+    });
+
+    // ============ SETTINGS REAL-TIME LISTENER ============
+    function startSettingsListener() {
+        if (window.__unsubSettings) window.__unsubSettings();
+        window.__unsubSettings = onSnapshot(doc(db, 'settings', 'app'), (snap) => {
+            if (snap.exists()) {
+                window.__appSettings = snap.data();
+                applySettingsToUI();
+            }
+        }, (err) => { console.log('Settings listener err:', err); });
+    }
+    window.startSettingsListener = startSettingsListener;
+
+    function applySettingsToUI() {
+        const s = window.__appSettings || {};
+
+        if (s.adminUpi) {
+            window.ADMIN_UPI_ID = s.adminUpi;
+            const adminUpiEl = document.getElementById('adminUpiValue');
+            if (adminUpiEl) adminUpiEl.innerText = s.adminUpi;
+        } else {
+            window.ADMIN_UPI_ID = 'mahasell@paytm';
+            const adminUpiEl = document.getElementById('adminUpiValue');
+            if (adminUpiEl) adminUpiEl.innerText = 'mahasell@paytm';
+        }
+
+        const ms = s.milestones || { ms10:15, ms30:50, ms100:150 };
+        const el10 = document.getElementById('ms10RewardVal');
+        const el30 = document.getElementById('ms30RewardVal');
+        const el100 = document.getElementById('ms100RewardVal');
+        if (el10) el10.innerText = ms.ms10;
+        if (el30) el30.innerText = ms.ms30;
+        if (el100) el100.innerText = ms.ms100;
+
+        const dailyAmt = (s.dailyBonus !== undefined) ? s.dailyBonus : 10;
+        const dailyEl = document.getElementById('dailyBonusAmount');
+        if (dailyEl) dailyEl.innerText = dailyAmt;
+
+        const cnt = (window.__userData && window.__userData.todayOrderCount) || 0;
+        const today = new Date().toISOString().split('T')[0];
+        const claimed = (window.__userData && window.__userData.milestonesClaimed) || {};
+        updateMilestoneUI(10, ms.ms10, cnt, claimed.ms10 === today);
+        updateMilestoneUI(30, ms.ms30, cnt, claimed.ms30 === today);
+        updateMilestoneUI(100, ms.ms100, cnt, claimed.ms100 === today);
+
+        applyLogoToUI();
+    }
+    window.applySettingsToUI = applySettingsToUI;
+
+    async function ensureUserDoc(user) {
+        const userRef = doc(db, 'users', user.uid);
+        const snap = await getDoc(userRef);
+        if (!snap.exists()) {
+            const newRefCode = 'MS-' + user.uid.substring(0, 6).toUpperCase();
+            await setDoc(userRef, {
+                uid: user.uid,
+                name: user.displayName || '',
+                email: user.email || '',
+                balance: 0, totalAmount: 0, todayEarning: 0,
+                eligibleBalance: 0, totalEarning: 0, totalSell: 0, totalBuy: 0,
+                boundUpi: '', upis: [], totalReferrals: 0, totalReferralCommission: 0,
+                dailyBonusClaimedDate: '',
+                milestonesClaimed: { ms10:'', ms30:'', ms100:'' },
+                todayOrderCount: 0, todayOrderDate: '',
+                referralCode: newRefCode,
+                referredBy: '',
+                blocked: false,
+                createdAt: serverTimestamp()
+            });
+        } else {
+            const data = snap.data();
+            const today = new Date().toISOString().split('T')[0];
+            if (data.todayOrderDate !== today) {
+                await updateDoc(userRef, {
+                    todayOrderCount: 0,
+                    todayOrderDate: today,
+                    todayEarning: 0
+                });
+            }
+            if (!data.referralCode) {
+                const newRefCode = 'MS-' + user.uid.substring(0, 6).toUpperCase();
+                await updateDoc(userRef, { referralCode: newRefCode });
+            }
+        }
+    }
+
+    function startUserDocListener(uid) {
+        const userRef = doc(db, 'users', uid);
+        window.__unsubUserDoc = onSnapshot(userRef, (snap) => {
+            if (!snap.exists()) return;
+            const data = snap.data();
+            window.__userData = data;
+
+            if (data.blocked === true) {
+                document.getElementById('mainContainer').style.display = 'none';
+                document.getElementById('mainNav').style.display = 'none';
+                document.getElementById('mainHeader').style.display = 'none';
+                document.getElementById('blockedScreen').classList.add('show');
+                return;
+            } else {
+                document.getElementById('blockedScreen').classList.remove('show');
+            }
+            applyUserDataToUI(data);
+        });
+    }
+
+    function applyUserDataToUI(data) {
+        window.balance = data.balance || 0;
+
+        let upisArray = data.upis || [];
+        if (!Array.isArray(upisArray)) upisArray = [];
+        if (upisArray.length === 0 && data.boundUpi) {
+            upisArray = [{ id: 'legacy_' + Date.now(), upiId: data.boundUpi, appName: 'Primary', active: true, createdAt: Date.now() }];
+        }
+        window.userUpis = upisArray;
+
+        document.getElementById('userBalance').innerText = fmtMoney(data.balance);
+        document.getElementById('sellAvailableBalance').innerText = '₹' + fmtMoney(data.balance);
+
+        document.getElementById('statTotalAmount').innerText = '₹' + fmtMoney(data.totalAmount);
+        document.getElementById('statTotalEarning').innerText = '₹' + fmtMoney(data.totalEarning);
+        document.getElementById('totalSellCount').innerText = (data.totalSell || 0) + ' Items';
+        document.getElementById('totalBuyCount').innerText = (data.totalBuy || 0) + ' Items';
+
+        document.getElementById('profileTodayEarning').innerText = '₹' + fmtMoney(data.todayEarning);
+
+        document.getElementById('totalReferrals').innerText = data.totalReferrals || 0;
+        document.getElementById('totalReferralCommission').innerText = '₹' + fmtMoney(data.totalReferralCommission);
+
+        const myRefCode = data.referralCode || ('MS-' + (data.uid || '').substring(0, 6).toUpperCase());
+        document.getElementById('myReferralCode').innerText = myRefCode;
+        window.myReferralCode = myRefCode;
+
+        // Referral eligibility
+        const totalBuy = data.totalBuy || 0;
+        const REFERRAL_UNLOCK_ORDERS = 25;
+        const eligBanner = document.getElementById('refEligibilityBanner');
+        const copyBtn = document.getElementById('copyReferralBtn');
+        const copyBtnText = document.getElementById('copyReferralBtnText');
+        const isEligible = totalBuy >= REFERRAL_UNLOCK_ORDERS;
+
+        if (isEligible) {
+            eligBanner.style.background = 'rgba(46, 204, 113, 0.15)';
+            eligBanner.style.borderColor = 'var(--success)';
+            eligBanner.style.color = 'var(--success)';
+            eligBanner.innerHTML = '<i class="fa-solid fa-circle-check"></i> Aap referral sharing ke liye eligible hain!';
+            if (copyBtn) { copyBtn.disabled = false; copyBtn.querySelector('i').className = 'fa-solid fa-copy'; if (copyBtnText) copyBtnText.innerText = 'Copy Referral Link'; }
+        } else {
+            eligBanner.style.background = 'rgba(255, 153, 51, 0.15)';
+            eligBanner.style.borderColor = 'var(--brand-orange)';
+            eligBanner.style.color = 'var(--brand-orange)';
+            eligBanner.innerHTML = `<i class="fa-solid fa-circle-info"></i> Referral sharing unlock karne ke liye ${REFERRAL_UNLOCK_ORDERS - totalBuy} more orders complete karein.`;
+            if (copyBtn) { copyBtn.disabled = true; copyBtn.querySelector('i').className = 'fa-solid fa-lock'; if (copyBtnText) copyBtnText.innerText = `Locked - Complete ${REFERRAL_UNLOCK_ORDERS} Orders`; }
+        }
+        window.__referralEligible = isEligible;
+
+        const today = new Date().toISOString().split('T')[0];
+        const dailyAmt = (window.__appSettings.dailyBonus !== undefined) ? window.__appSettings.dailyBonus : 10;
+        document.getElementById('dailyBonusAmount').innerText = dailyAmt;
+        const b = document.getElementById('dailyBonusBtn');
+        if (data.dailyBonusClaimedDate === today) { b.disabled = true; b.innerText = 'Claimed'; }
+        else { b.disabled = false; b.innerText = 'Claim'; }
+
+        const ms = window.__appSettings.milestones || { ms10:15, ms30:50, ms100:150 };
+        const cnt = data.todayOrderCount || 0;
+        const claimed = data.milestonesClaimed || {};
+        updateMilestoneUI(10, ms.ms10, cnt, claimed.ms10 === today);
+        updateMilestoneUI(30, ms.ms30, cnt, claimed.ms30 === today);
+        updateMilestoneUI(100, ms.ms100, cnt, claimed.ms100 === today);
+
+        const sellBtn = document.getElementById('mainSellBtn');
+        if (sellBtn) {
+            if ((data.balance || 0) <= 0) { sellBtn.disabled = true; sellBtn.style.opacity = '0.5'; }
+            else { sellBtn.disabled = false; sellBtn.style.opacity = '1'; }
+        }
+        updateUpiDisplays();
+        renderUpiListInModal();
+    }
+    window.applyUserDataToUI = applyUserDataToUI;
+
+    function updateMilestoneUI(target, reward, current, claimed) {
+        const fillEl = document.getElementById('ms' + target + 'Fill');
+        const countEl = document.getElementById('ms' + target + 'Count');
+        const btn = document.getElementById('ms' + target + 'Btn');
+        if (!fillEl || !countEl || !btn) return;
+        const pct = Math.min(100, (current / target) * 100);
+        fillEl.style.width = pct + '%';
+        countEl.innerText = current + ' / ' + target;
+        if (claimed) { btn.disabled = true; btn.innerText = 'Claimed ✓'; }
+        else if (current >= target) { btn.disabled = false; btn.innerText = 'Claim ₹' + reward; }
+        else { btn.disabled = true; btn.innerText = `Claim ₹${reward} (${target - current} more)`; }
+    }
+
+    async function loadAppSettings() {
+        try {
+            const snap = await getDoc(doc(db, 'settings', 'app'));
+            if (snap.exists()) window.__appSettings = snap.data();
+            else window.__appSettings = {};
+            if (window.__appSettings.adminUpi) window.ADMIN_UPI_ID = window.__appSettings.adminUpi;
+            else window.ADMIN_UPI_ID = 'mahasell@paytm';
+        } catch (e) {
+            console.log('Settings load err:', e);
+            window.ADMIN_UPI_ID = 'mahasell@paytm';
+        }
+    }
+
+    function applyLogoToUI() {
+        const logo = window.__appSettings.logo;
+        const headerContainer = document.getElementById('headerLogoContainer');
+        if (logo) headerContainer.innerHTML = `<img src="${logo}" class="brand-logo-img" alt="Logo">`;
+        else headerContainer.innerHTML = `<i class="fa-solid fa-store" style="color: var(--brand-orange); font-size: 1.5rem;"></i>`;
+        const loginContainer = document.getElementById('loginLogoContainer');
+        if (logo) loginContainer.innerHTML = `<img src="${logo}" class="brand-logo-large" alt="Logo">`;
+        else loginContainer.innerHTML = `<i class="fa-solid fa-store" style="font-size: 3rem; color: var(--brand-orange);"></i>`;
+        const signupContainer = document.getElementById('signupLogoContainer');
+        if (logo) signupContainer.innerHTML = `<img src="${logo}" class="brand-logo-large" alt="Logo">`;
+        else signupContainer.innerHTML = `<i class="fa-solid fa-store" style="font-size: 3rem; color: var(--brand-orange);"></i>`;
+        const loaderContainer = document.getElementById('loaderLogoContainer');
+        if (logo) loaderContainer.innerHTML = `<img src="${logo}" class="brand-logo-large" alt="Logo" style="margin:0 auto;">`;
+        else loaderContainer.innerHTML = `<i class="fa-solid fa-chart-line" style="font-size:3rem; color:var(--brand-orange);"></i>`;
+    }
+    window.applyLogoToUI = applyLogoToUI;
+
+    // ============ BROADCAST ============
+    async function loadBroadcast() {
+        try {
+            const snap = await getDoc(doc(db, 'settings', 'broadcast'));
+            const container = document.getElementById('broadcastContainer');
+            if (snap.exists()) {
+                const data = snap.data();
+                const msg = data.message || '';
+                window.__broadcastMessage = msg;
+                if (msg) {
+                    container.innerHTML = `
+                        <div class="broadcast-banner">
+                            <i class="fa-solid fa-bullhorn"></i>
+                            <div class="msg">${escapeHtml(msg)}</div>
+                        </div>`;
+                } else {
+                    container.innerHTML = '';
+                }
+            } else {
+                window.__broadcastMessage = '';
+                container.innerHTML = '';
+            }
+        } catch (e) { console.log('Broadcast err:', e); }
+    }
+    window.loadBroadcast = loadBroadcast;
+
+    // ============ BANNERS ============
+    function startBannersListener() {
+        onSnapshot(collection(db, 'banners'), (snap) => {
+            const banners = [];
+            snap.forEach(d => banners.push({ id: d.id, ...d.data() }));
+            banners.sort((a, b) => (a.createdAt?.toMillis?.() || 0) - (b.createdAt?.toMillis?.() || 0));
+            window.__bannersData = banners;
+            renderBannerSlider(banners);
+        }, (err) => console.error('Banners listener error:', err));
+    }
+
+    function renderBannerSlider(banners) {
+        const container = document.getElementById('bannerSliderContainer');
+        if (!banners.length) {
+            container.innerHTML = '';
+            if (window.__bannerAutoTimer) clearInterval(window.__bannerAutoTimer);
+            return;
+        }
+        container.innerHTML = `
+            <div class="banner-slider" id="bannerSlider">
+                ${banners.map((b, idx) => `
+                    <div class="banner-slide ${idx === 0 ? 'active' : ''}" data-index="${idx}">
+                        <img src="${b.image}" alt="Banner ${idx + 1}">
+                    </div>`).join('')}
+                ${banners.length > 1 ? `
+                    <button class="banner-nav prev" onclick="changeBanner(-1)"><i class="fa-solid fa-chevron-left"></i></button>
+                    <button class="banner-nav next" onclick="changeBanner(1)"><i class="fa-solid fa-chevron-right"></i></button>
+                    <div class="banner-dots">
+                        ${banners.map((_, idx) => `<div class="banner-dot ${idx === 0 ? 'active' : ''}" onclick="goToBanner(${idx})"></div>`).join('')}
+                    </div>` : ''}
+            </div>`;
+        window.__currentBannerIndex = 0;
+        if (window.__bannerAutoTimer) clearInterval(window.__bannerAutoTimer);
+        if (banners.length > 1) window.__bannerAutoTimer = setInterval(() => changeBanner(1), 4000);
+    }
+    window.renderBannerSlider = renderBannerSlider;
+    window.changeBanner = function(direction) {
+        const banners = window.__bannersData || [];
+        if (banners.length < 2) return;
+        let newIdx = window.__currentBannerIndex + direction;
+        if (newIdx < 0) newIdx = banners.length - 1;
+        if (newIdx >= banners.length) newIdx = 0;
+        goToBanner(newIdx);
+    };
+    window.goToBanner = function(idx) {
+        const slides = document.querySelectorAll('.banner-slide');
+        const dots = document.querySelectorAll('.banner-dot');
+        slides.forEach(s => s.classList.remove('active'));
+        dots.forEach(d => d.classList.remove('active'));
+        if (slides[idx]) slides[idx].classList.add('active');
+        if (dots[idx]) dots[idx].classList.add('active');
+        window.__currentBannerIndex = idx;
+    };
+
+    // ============ SLOTS ============
+    function startSlotsListener() {
+        onSnapshot(collection(db, 'slots'), (snap) => {
+            const slots = [];
+            snap.forEach(d => slots.push({ id: d.id, ...d.data() }));
+            slots.sort((a, b) => (a.amount || 0) - (b.amount || 0));
+            window.__slotsData = slots;
+            renderSlots(slots);
+        });
+    }
+
+    function renderSlots(slots) {
+        const container = document.getElementById('ordersGridContainer');
+        document.getElementById('slotCount').innerText = `${slots.length} Slots Available`;
+        if (!slots.length) {
+            container.innerHTML = `<div class="empty-state"><i class="fa-solid fa-box-open"></i><p>Koi slot available nahi hai. Admin ne abhi tak add nahi kiya.</p></div>`;
+            return;
+        }
+        container.innerHTML = slots.map(slot => `
+            <div class="order-card">
+                <div class="order-header">
+                    <span class="order-range">${escapeHtml(slot.range)}</span>
+                    <span class="order-stock"><i class="fa-solid fa-box"></i> Stock: ${slot.stock || 0}</span>
+                </div>
+                <div class="order-details">
+                    <span>Income Rate: <strong>${escapeHtml(slot.income || '3%+6')}</strong></span>
+                    <span>Commission: <strong>${escapeHtml(slot.commission || 'Up to 12%')}</strong></span>
+                </div>
+                ${slot.extraBonus ? `<div class="order-details"><span>Extra Bonus: <strong style="color:var(--success);">₹${slot.extraBonus}</strong></span>${slot.percentBonus ? `<span>Percent Bonus: <strong style="color:var(--success);">${slot.percentBonus}%</strong></span>` : ''}</div>` : ''}
+                ${slot.link ? `<div class="order-details"><span>Task: <strong><a href="${escapeHtml(slot.link)}" target="_blank" style="color:var(--info);text-decoration:none;">Open Task Link <i class="fa-solid fa-external-link-alt"></i></a></strong></span></div>` : ''}
+                <div class="order-footer">
+                    <div class="amount-tag">₹${fmtMoney(slot.amount)}</div>
+                    <button class="btn-buy" onclick="openPaymentPage('${slot.id}')"><i class="fa-solid fa-cart-plus"></i> Buy</button>
+                </div>
+            </div>`).join('');
+    }
+    window.renderSlots = renderSlots;
+
+    // ============ ORDERS ============
+    function startOrdersListener(uid) {
+        const q = query(collection(db, 'orders'), where('userId', '==', uid));
+        onSnapshot(q, (snap) => {
+            const orders = [];
+            snap.forEach(d => orders.push({ id: d.id, ...d.data() }));
+            orders.sort((a, b) => (b.createdAt?.toMillis?.() || 0) - (a.createdAt?.toMillis?.() || 0));
+            window.__allUserOrders = orders;
+            renderBuyHistory(orders);
+            updateTodayEarningModal(orders);
+        });
+    }
+
+    function renderBuyHistory(orders) {
+        const container = document.getElementById('buyHistoryContainer');
+        const buyOrders = orders.filter(o => o.type !== 'sell' && o.source !== 'admin_manual');
+        document.getElementById('buyHistoryCount').innerText = buyOrders.length + ' Orders';
+        if (!buyOrders.length) {
+            container.innerHTML = `<div class="card" style="text-align: center;"><i class="fa-solid fa-inbox" style="font-size: 2rem; color: var(--text-muted); opacity:0.5;"></i><p style="color: var(--text-muted); font-size: 0.85rem; margin-top: 10px;">Abhi tak koi buy order nahi kiya.</p></div>`;
+            return;
+        }
+        container.innerHTML = buyOrders.map(o => renderOrderCard(o)).join('');
+    }
+    window.renderBuyHistory = renderBuyHistory;
+
+    function renderOrderCard(o) {
+        const statusClass = 'status-' + (o.status || 'pending');
+        const statusText = (o.status || 'pending').toUpperCase();
+        const iconMap = { pending:'fa-clock', success:'fa-circle-check', failed:'fa-circle-xmark', processing:'fa-spinner fa-spin' };
+        const icon = iconMap[o.status] || 'fa-clock';
+        const dateStr = o.createdAt?.toDate ? o.createdAt.toDate().toLocaleString() : 'Just now';
+        return `
+            <div class="order-history-card ${statusClass}">
+                <div class="order-history-header">
+                    <div>
+                        <div class="order-history-id">#${o.id.substring(0, 8).toUpperCase()}</div>
+                        <div class="order-history-range">Range: ${escapeHtml(o.range || '-')}</div>
+                    </div>
+                    <span class="status-badge ${statusClass}"><i class="fa-solid ${icon}"></i> ${statusText}</span>
+                </div>
+                <div class="order-history-details">
+                    <span>Amount Paid<strong>₹${fmtMoney(o.amount)}</strong></span>
+                    <span>Return Amount<strong>₹${fmtMoney(o.returnAmount)}</strong></span>
+                    <span>UTR<strong>${escapeHtml(o.utr || '-')}</strong></span>
+                    ${o.paymentUpiId ? `<span>Payment UPI<strong style="color:var(--brand-orange);font-size:0.72rem;word-break:break-all;">${escapeHtml(o.paymentUpiId)}</strong></span>` : ''}
+                    <span>Date<strong style="font-size:0.72rem;">${dateStr}</strong></span>
+                </div>
+            </div>`;
+    }
+
+    // ============ TODAY EARNING MODAL ============
+    function updateTodayEarningModal(orders) {
+        const today = new Date().toISOString().split('T')[0];
+        const todayOrders = (orders || []).filter(o => {
+            if (o.status !== 'success') return false;
+            if (!o.createdAt) return false;
+            const dt = o.createdAt.toDate ? o.createdAt.toDate() : new Date(o.createdAt);
+            return dt.toISOString().split('T')[0] === today;
+        });
+        todayOrders.sort((a, b) => (b.createdAt?.toMillis?.() || 0) - (a.createdAt?.toMillis?.() || 0));
+
+        let totalProfit = 0;
+        todayOrders.forEach(o => {
+            const amt = parseFloat(o.amount) || 0;
+            const ret = parseFloat(o.returnAmount) || 0;
+            const profit = ret - amt;
+            if (profit > 0) totalProfit += profit;
+        });
+
+        document.getElementById('todayEarningTotal').innerText = '₹' + fmtMoney(totalProfit);
+        document.getElementById('todayOrdersCount').innerText = todayOrders.length;
+
+        const container = document.getElementById('todayEarningOrdersList');
+        if (!todayOrders.length) {
+            container.innerHTML = `<div class="empty-state" style="padding: 25px;"><i class="fa-solid fa-inbox"></i><p style="font-size: 0.8rem;">Aaj koi order approve nahi hua.</p></div>`;
+            return;
+        }
+        container.innerHTML = todayOrders.map(o => {
+            const amt = parseFloat(o.amount) || 0;
+            const ret = parseFloat(o.returnAmount) || 0;
+            const profit = ret - amt;
+            const timeStr = o.createdAt?.toDate ? o.createdAt.toDate().toLocaleTimeString([], {hour:'2-digit', minute:'2-digit'}) : '-';
+            return `
+                <div class="te-order-item">
+                    <div class="te-order-info">
+                        <strong>Range: ${escapeHtml(o.range || '-')}</strong>
+                        <small>Paid ₹${fmtMoney(amt)} → Return ₹${fmtMoney(ret)} • ${timeStr}</small>
+                    </div>
+                    <div class="te-order-earn ${profit > 0 ? '' : 'zero'}">${profit > 0 ? '+' : ''}₹${fmtMoney(profit)}</div>
+                </div>`;
+        }).join('');
+    }
+    window.updateTodayEarningModal = updateTodayEarningModal;
+
+    window.openTodayEarningModal = function() {
+        updateTodayEarningModal(window.__allUserOrders || []);
+        openModal('todayEarningModal');
+    };
+
+    // ============ SELL REQUESTS ============
+    function startSellRequestsListener(uid) {
+        if (window.__unsubSellRequests) window.__unsubSellRequests();
+        const q = query(collection(db, 'sell_requests'), where('userId', '==', uid));
+        window.__unsubSellRequests = onSnapshot(q, (snap) => {
+            const reqs = [];
+            snap.forEach(d => reqs.push({ id: d.id, ...d.data() }));
+            reqs.sort((a, b) => (b.createdAt?.toMillis?.() || 0) - (a.createdAt?.toMillis?.() || 0));
+            window.__sellRequests = reqs;
+            renderSellHistory(reqs);
+        });
+    }
+    window.startSellRequestsListener = startSellRequestsListener;
+
+    function renderSellHistory(reqs) {
+        const container = document.getElementById('sellHistoryContainer');
+        document.getElementById('sellHistoryCount').innerText = reqs.length + ' Orders';
+        if (!reqs.length) {
+            container.innerHTML = `<div class="card" style="text-align: center;"><i class="fa-solid fa-inbox" style="font-size: 2rem; color: var(--text-muted); opacity:0.5;"></i><p style="color: var(--text-muted); font-size: 0.85rem; margin-top: 10px;">Abhi tak koi sell request nahi ki.</p></div>`;
+            return;
+        }
+        container.innerHTML = reqs.map(o => renderSellCard(o)).join('');
+    }
+    window.renderSellHistory = renderSellHistory;
+
+    function renderSellCard(o) {
+        const status = (o.status || 'pending').toLowerCase();
+        let statusClass, statusIcon, statusText;
+        if (status === 'approved') { statusClass = 'status-success'; statusIcon = 'fa-circle-check'; statusText = 'APPROVED'; }
+        else if (status === 'rejected') { statusClass = 'status-failed'; statusIcon = 'fa-circle-xmark'; statusText = 'REJECTED'; }
+        else { statusClass = 'status-pending'; statusIcon = 'fa-clock'; statusText = 'PENDING'; }
+
+        const dateStr = o.createdAt?.toDate ? o.createdAt.toDate().toLocaleString() : 'Just now';
+        return `
+            <div class="order-history-card ${statusClass}">
+                <div class="order-history-header">
+                    <div>
+                        <div class="order-history-id">#${o.id.substring(0, 8).toUpperCase()}</div>
+                        <div class="order-history-range"><span class="sell-note-badge"><i class="fa-solid fa-arrow-up-from-bracket"></i> Sell Request</span></div>
+                    </div>
+                    <span class="status-badge ${statusClass}"><i class="fa-solid ${statusIcon}"></i> ${statusText}</span>
+                </div>
+                <div class="order-history-details">
+                    <span>Sell Amount<strong style="color:var(--success);">₹${fmtMoney(o.amount)}</strong></span>
+                    <span>Receive UPI<strong style="color:var(--brand-orange);font-size:0.72rem;word-break:break-all;">${escapeHtml(o.receiveUpiId || o.upiId || '-')}</strong></span>
+                    <span>Date<strong style="font-size:0.72rem;">${dateStr}</strong></span>
+                    ${status === 'rejected' && o.rejectReason ? `<span style="grid-column:span 2;">Reason<strong style="color:#e74c3c;">${escapeHtml(o.rejectReason)}</strong></span>` : ''}
+                </div>
+            </div>`;
+    }
+
+    // ============ REFERRALS ============
+    function startReferralsListener(uid) {
+        if (window.__unsubReferrals) window.__unsubReferrals();
+        const q = query(collection(db, 'users'), where('referredBy', '==', uid));
+        window.__unsubReferrals = onSnapshot(q, (snap) => {
+            const users = [];
+            snap.forEach(d => {
+                const data = d.data();
+                users.push({
+                    id: d.id,
+                    name: data.name || 'User',
+                    totalBuy: data.totalBuy || 0,
+                    createdAt: data.createdAt?.toMillis?.() || 0
+                });
+            });
+            users.sort((a, b) => b.createdAt - a.createdAt);
+            window.__referredUsers = users;
+            renderReferredUsers(users);
+        });
+    }
+    window.startReferralsListener = startReferralsListener;
+
+    function renderReferredUsers(users) {
+        const container = document.getElementById('referredUsersContainer');
+        document.getElementById('referredUsersCount').innerText = users.length + ' Users';
+        if (!users.length) {
+            container.innerHTML = `<div class="empty-state" style="padding: 20px;"><i class="fa-solid fa-user-plus"></i><p style="font-size: 0.8rem;">Abhi tak kisi ko refer nahi kiya. Apna code share karein!</p></div>`;
+            return;
+        }
+        container.innerHTML = users.map(u => {
+            const pct = Math.min(100, (u.totalBuy / 10) * 100);
+            const bonusGiven = u.totalBuy >= 10;
+            return `
+                <div style="background: rgba(255,255,255,0.05); border: 1px solid var(--glass-border); border-radius: 10px; padding: 12px; margin-bottom: 10px;">
+                    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 6px;">
+                        <strong style="color: #fff; font-size: 0.9rem;">${escapeHtml(u.name)}</strong>
+                        <span style="font-size: 0.7rem; color: ${bonusGiven ? 'var(--success)' : 'var(--text-muted)'}; font-weight: 600;">
+                            ${bonusGiven ? '✓ ₹300 Earned' : `${u.totalBuy}/10 Orders`}
+                        </span>
+                    </div>
+                    <div class="ref-bonus-track"><div class="ref-bonus-fill" style="width:${pct}%"></div></div>
+                </div>`;
+        }).join('');
+    }
+    window.renderReferredUsers = renderReferredUsers;
+
+    // ============ AUTH ============
+    window.handleSignup = async function() {
+        const name = document.getElementById('signupName').value.trim();
+        const email = document.getElementById('signupEmail').value.trim();
+        const password = document.getElementById('signupPassword').value;
+        const confirmPassword = document.getElementById('signupConfirmPassword').value;
+        const referralCodeInput = document.getElementById('signupReferralCode').value.trim().toUpperCase();
+        const agreeTerms = document.getElementById('agreeTerms').checked;
+
+        const loader = document.getElementById('signupLoader');
+        const btn = document.getElementById('signupBtn');
+        document.getElementById('signupError').classList.remove('show');
+
+        if (!name) return showAuthError('signupError', 'Please enter your full name.');
+        if (!email || !email.includes('@')) return showAuthError('signupError', 'Please enter a valid email.');
+        if (password.length < 6) return showAuthError('signupError', 'Password must be at least 6 characters.');
+        if (password !== confirmPassword) return showAuthError('signupError', 'Passwords do not match.');
+        if (!agreeTerms) return showAuthError('signupError', 'You must agree to Terms & Conditions and Privacy Policy.');
+
+        loader.classList.add('show'); btn.disabled = true;
+
+        try {
+            let referrerUid = '';
+            if (referralCodeInput) {
+                const rq = query(collection(db, 'users'), where('referralCode', '==', referralCodeInput), limit(1));
+                const rSnap = await getDocs(rq);
+                if (rSnap.empty) {
+                    loader.classList.remove('show'); btn.disabled = false;
+                    return showAuthError('signupError', 'Invalid referral code. Kripya sahi code daalein ya khaali chhod dein.');
+                }
+                referrerUid = rSnap.docs[0].id;
+            }
+
+            const userCredential = await createUserWithEmailAndPassword(auth, email, password);
+            await updateProfile(userCredential.user, { displayName: name });
+            const myRefCode = 'MS-' + userCredential.user.uid.substring(0, 6).toUpperCase();
+
+            await setDoc(doc(db, 'users', userCredential.user.uid), {
+                uid: userCredential.user.uid,
+                name: name, email: email,
+                balance: 0, totalAmount: 0, todayEarning: 0,
+                eligibleBalance: 0, totalEarning: 0, totalSell: 0, totalBuy: 0,
+                boundUpi: '', upis: [], totalReferrals: 0, totalReferralCommission: 0,
+                dailyBonusClaimedDate: '',
+                milestonesClaimed: { ms10:'', ms30:'', ms100:'' },
+                todayOrderCount: 0, todayOrderDate: '',
+                referralCode: myRefCode,
+                referredBy: referrerUid || '',
+                referralBonusGiven: false,
+                blocked: false,
+                createdAt: serverTimestamp()
+            });
+
+            if (referrerUid) {
+                await updateDoc(doc(db, 'users', referrerUid), {
+                    totalReferrals: increment(1)
+                });
+            }
+
+            document.getElementById('signupName').value = '';
+            document.getElementById('signupEmail').value = '';
+            document.getElementById('signupPassword').value = '';
+            document.getElementById('signupConfirmPassword').value = '';
+            document.getElementById('signupReferralCode').value = '';
+            document.getElementById('agreeTerms').checked = false;
+
+            if (referralCodeInput) alert('✅ Account create ho gaya! Referral code apply ho gaya.');
+        } catch (err) {
+            showAuthError('signupError', mapFirebaseError(err.code));
+        } finally {
+            loader.classList.remove('show'); btn.disabled = false;
+        }
+    };
+
+    window.handleLogin = async function() {
+        const email = document.getElementById('loginEmail').value.trim();
+        const password = document.getElementById('loginPassword').value;
+        const loader = document.getElementById('loginLoader');
+        const btn = document.getElementById('loginBtn');
+        document.getElementById('loginError').classList.remove('show');
+
+        if (!email || !email.includes('@')) return showAuthError('loginError', 'Please enter valid email.');
+        if (!password) return showAuthError('loginError', 'Please enter password.');
+
+        loader.classList.add('show'); btn.disabled = true;
+        try {
+            await signInWithEmailAndPassword(auth, email, password);
+            document.getElementById('loginEmail').value = '';
+            document.getElementById('loginPassword').value = '';
+        } catch (err) {
+            showAuthError('loginError', mapFirebaseError(err.code));
+        } finally {
+            loader.classList.remove('show'); btn.disabled = false;
+        }
+    };
+
+    window.handleLogout = async function() {
+        if (!confirm('Are you sure you want to logout?')) return;
+        try { await signOut(auth); } catch (e) { alert('Logout failed: ' + e.message); }
+    };
+
+    window.handleForgotPassword = async function() {
+        const email = prompt('Enter your registered email:');
+        if (!email) return;
+        if (!email.includes('@')) { alert('Valid email daalein.'); return; }
+        try {
+            await sendPasswordResetEmail(auth, email);
+            alert('Password reset link sent! Check your inbox.');
+        } catch (err) { alert('Error: ' + mapFirebaseError(err.code)); }
+    };
+
+    window.showAuthError = function(id, msg) {
+        const box = document.getElementById(id);
+        box.innerText = msg; box.classList.add('show');
+    };
+
+    window.togglePassword = function(inputId, iconEl) {
+        const input = document.getElementById(inputId);
+        if (input.type === 'password') { input.type = 'text'; iconEl.classList.remove('fa-eye'); iconEl.classList.add('fa-eye-slash'); }
+        else { input.type = 'password'; iconEl.classList.remove('fa-eye-slash'); iconEl.classList.add('fa-eye'); }
+    };
+
+    window.showScreen = function(id) {
+        document.querySelectorAll('.auth-screen').forEach(s => s.classList.remove('active'));
+        document.getElementById(id).classList.add('active');
+        document.getElementById('signupError').classList.remove('show');
+        document.getElementById('loginError').classList.remove('show');
+    };
+
+    function mapFirebaseError(code) {
+        const map = {
+            'auth/email-already-in-use': 'This email is already registered.',
+            'auth/invalid-email': 'Please enter a valid email.',
+            'auth/weak-password': 'Password is too weak.',
+            'auth/user-not-found': 'No account found. Please sign up.',
+            'auth/wrong-password': 'Incorrect password.',
+            'auth/invalid-credential': 'Invalid email or password.',
+            'auth/too-many-requests': 'Too many attempts. Try later.',
+            'auth/network-request-failed': 'Network error.'
+        };
+        return map[code] || ('Something went wrong: ' + code);
+    }
+
+    function updateUserProfileUI(user) {
+        const welcomeEl = document.getElementById('welcomeName');
+        if (welcomeEl) welcomeEl.innerHTML = `${escapeHtml(user.name || 'User')} <span class="online-dot"></span>`;
+        document.getElementById('profileName').innerText = user.name || 'User';
+        document.getElementById('profileEmail').innerText = user.email || '-';
+        document.getElementById('profileUid').innerText = user.uid;
+        document.getElementById('drawerName').innerText = user.name || 'User';
+        document.getElementById('drawerEmail').innerText = user.email || '-';
+        document.getElementById('drawerUid').innerText = user.uid;
+    }
+    window.updateUserProfileUI = updateUserProfileUI;
+
+    // ============ LEGAL / SUPPORT ============
+    window.openLegalPage = function(type) {
+        const links = (window.__appSettings && window.__appSettings.links) || {};
+        const url = type === 'terms' ? links.terms : links.privacy;
+        if (!url || url.trim() === '') { alert('Ye link admin ne set nahi kiya hai.'); return; }
+        window.open(url, '_blank');
+    };
+
+    window.openSupportLink = function() {
+        const links = (window.__appSettings.links) || {};
+        if (links.support) window.open(links.support, '_blank');
+        else alert('Customer support link admin ne set nahi ki hai.');
+    };
+
+    // ============ APK DOWNLOAD ============
+    window.downloadAPK = function() {
+        // Priority: 1) settings.apkUrl, 2) current base URL + /app.apk (Hostinger friendly)
+        const settings = window.__appSettings || {};
+        let apkUrl = settings.apkUrl || settings.apkDownloadUrl || '';
+        if (!apkUrl) {
+            // Auto-detect: same host + /app.apk (Hostinger friendly path)
+            apkUrl = getBaseUrl() + '/app.apk';
+        }
+        if (!apkUrl) { alert('APK download link admin ne set nahi kiya hai.'); return; }
+        // Try opening in new tab (works with direct download links)
+        try {
+            const a = document.createElement('a');
+            a.href = apkUrl;
+            a.download = 'MahaSell.apk';
+            a.target = '_blank';
+            a.rel = 'noopener';
+            document.body.appendChild(a);
+            a.click();
+            document.body.removeChild(a);
+        } catch (e) {
+            window.open(apkUrl, '_blank');
+        }
+        // Hide banner permanently after first download
+        localStorage.setItem('apkBannerDismissed', '1');
+        const banner = document.getElementById('apkDownloadBanner');
+        if (banner) banner.style.display = 'none';
+    };
+
+    window.dismissApkBanner = function() {
+        localStorage.setItem('apkBannerDismissed', '1');
+        const banner = document.getElementById('apkDownloadBanner');
+        if (banner) banner.style.display = 'none';
+    };
+
+    function initApkBanner() {
+        const banner = document.getElementById('apkDownloadBanner');
+        if (!banner) return;
+        if (localStorage.getItem('apkBannerDismissed') === '1') {
+            banner.style.display = 'none';
+        }
+    }
+
+    // ============ UTR ============
+    window.validateUTR = function(utr) {
+        if (!utr) return { valid: false, msg: 'UTR required' };
+        const cleaned = utr.trim();
+        if (cleaned.length < 10) return { valid: false, msg: 'UTR kam se kam 10 characters ka hona chahiye' };
+        if (cleaned.length > 24) return { valid: false, msg: 'UTR 24 characters se zyada nahi ho sakta' };
+        if (!/^[A-Za-z0-9]+$/.test(cleaned)) return { valid: false, msg: 'UTR mein sirf letters aur numbers allowed hain' };
+        const digitCount = (cleaned.match(/\d/g) || []).length;
+        if (digitCount < 8) return { valid: false, msg: 'UTR mein kam se kam 8 digits hone chahiye' };
+        const fakePatterns = [
+            /^1234567890+$/, /^0123456789+$/, /^(\d)\1{9,}$/,
+            /^111111111/, /^000000000/, /^999999999/, /^123123123/,
+            /^123456789012$/, /^ABCDEFGH/, /^abcdefgh/i,
+            /^test/i, /^dummy/i, /^fake/i, /^xxxx/i, /^aaaa/i
+        ];
+        for (const pattern of fakePatterns) {
+            if (pattern.test(cleaned)) return { valid: false, msg: '❌ Ye UTR fake lagta hai. Asli UTR daalein.' };
+        }
+        return { valid: true, msg: '✓ UTR format sahi hai' };
+    };
+
+    function showUTRValidation(valid, msg) {
+        const el = document.getElementById('utrValidationMsg');
+        if (!el) return;
+        el.style.display = 'block';
+        el.innerText = msg;
+        el.style.color = valid ? '#2ecc71' : '#e74c3c';
+    }
+
+    document.addEventListener('DOMContentLoaded', function() {
+        initApkBanner();
+        const utrInput = document.getElementById('utrInput');
+        if (utrInput) {
+            utrInput.addEventListener('input', function() {
+                const val = this.value.trim();
+                if (!val) { document.getElementById('utrValidationMsg').style.display = 'none'; return; }
+                const result = validateUTR(val);
+                showUTRValidation(result.valid, result.msg);
+            });
+        }
+        const sellInput = document.getElementById('sellAmountInput');
+        if (sellInput) {
+            sellInput.addEventListener('input', function() {
+                const val = parseFloat(this.value);
+                const msgEl = document.getElementById('sellAmountMsg');
+                const bal = (window.__userData && window.__userData.balance) || 0;
+                if (!this.value) { msgEl.style.display = 'none'; return; }
+                msgEl.style.display = 'block';
+                if (isNaN(val) || val <= 0) { msgEl.innerText = 'Valid amount daalein'; msgEl.style.color = '#e74c3c'; }
+                else if (val < 10) { msgEl.innerText = 'Minimum ₹10 sell kar sakte hain'; msgEl.style.color = '#e74c3c'; }
+                else if (val > bal) { msgEl.innerText = `Aapke paas sirf ₹${bal.toFixed(2)} hai`; msgEl.style.color = '#e74c3c'; }
+                else { msgEl.innerText = '✓ Valid amount'; msgEl.style.color = '#2ecc71'; }
+            });
+        }
+    });
+
+    // ============ SCREENSHOT ============
+    let screenshotMetadata = null;
+    window.handleScreenshot = function(event) {
+        const file = event.target.files[0];
+        if (!file) return;
+        if (!file.type.startsWith('image/')) { alert('Sirf image upload karein.'); event.target.value = ''; return; }
+        if (file.size > 2 * 1024 * 1024) { alert('Image 2MB se choti honi chahiye.'); event.target.value = ''; return; }
+        document.getElementById('fileNameDisplay').innerText = file.name;
+        const reader = new FileReader();
+        reader.onload = function(e) {
+            const img = new Image();
+            img.onload = function() {
+                if (img.width < 100 || img.height < 100) {
+                    alert('Screenshot bahut chota hai.');
+                    document.getElementById('screenshotInput').value = '';
+                    document.getElementById('fileNameDisplay').innerText = '';
+                    return;
+                }
+                const canvas = document.createElement('canvas');
+                const maxW = 800;
+                let w = img.width, h = img.height;
+                if (w > maxW) { h = (maxW / w) * h; w = maxW; }
+                canvas.width = w; canvas.height = h;
+                canvas.getContext('2d').drawImage(img, 0, 0, w, h);
+                const compressed = canvas.toDataURL('image/jpeg', 0.7);
+                window.uploadedScreenshotBase64 = compressed;
+                screenshotMetadata = {
+                    originalWidth: img.width, originalHeight: img.height,
+                    originalSize: file.size, uploadedAt: new Date().toISOString()
+                };
+                const preview = document.getElementById('screenshotPreview');
+                preview.src = compressed;
+                preview.style.display = 'block';
+            };
+            img.src = e.target.result;
+        };
+        reader.readAsDataURL(file);
+    };
+
+    // ============ PAYMENT ============
+    let currentPendingOrder = null;
+    let selectedPaymentUpiId = null;
+    let selectedSellUpiId = null;
+
+    window.openPaymentPage = function(slotId) {
+        if (!window.__currentUser) { alert('Please login first.'); return; }
+        const slot = (window.__slotsData || []).find(s => s.id === slotId);
+        if (!slot) { alert('Slot not found.'); return; }
+        currentPendingOrder = { slotId: slot.id, amount: slot.amount, range: slot.range, returnAmount: slot.returnAmount || (slot.amount * 1.06) };
+        document.getElementById('payAmountDisplay').innerText = '₹' + fmtMoney(slot.amount);
+        document.getElementById('payRangeDisplay').innerText = slot.range || '-';
+        document.getElementById('adminUpiValue').innerText = window.__appSettings.adminUpi || window.ADMIN_UPI_ID || 'mahasell@paytm';
+        document.getElementById('utrInput').value = '';
+        document.getElementById('screenshotInput').value = '';
+        document.getElementById('fileNameDisplay').innerText = '';
+        document.getElementById('screenshotPreview').style.display = 'none';
+        document.getElementById('screenshotPreview').src = '';
+        document.getElementById('utrValidationMsg').style.display = 'none';
+        window.uploadedScreenshotBase64 = null;
+        screenshotMetadata = null;
+        selectedPaymentUpiId = null;
+        renderPaymentUpiSelection();
+        openModal('paymentModal');
+    };
+
+    function renderPaymentUpiSelection() {
+        const container = document.getElementById('upiSelectList');
+        const upis = window.userUpis || [];
+        const activeUpis = upis.filter(u => u.active === true);
+        if (!activeUpis.length) {
+            container.innerHTML = `
+                <div class="empty-state" style="padding: 15px;">
+                    <i class="fa-solid fa-exclamation-circle" style="color: var(--warning);"></i>
+                    <p style="font-size: 0.8rem;">Aapne koi active UPI bind nahi kiya hai.</p>
+                    <button class="btn btn-primary" style="margin-top: 10px; max-width: 200px; margin-left: auto; margin-right: auto;" onclick="closeModal('paymentModal'); openModal('addUpiModal');"><i class="fa-solid fa-plus"></i> Add UPI Now</button>
+                </div>`;
+            return;
+        }
+        container.innerHTML = activeUpis.map(u => `
+            <div class="upi-select-item" data-upi="${escapeHtml(u.upiId)}" onclick="selectPaymentUpi(this, '${escapeHtml(u.upiId)}')">
+                <div class="icon-wrap"><i class="fa-solid fa-mobile-screen-button"></i></div>
+                <div class="txt-wrap"><strong>${escapeHtml(u.upiId)}</strong><small>${escapeHtml(u.appName || 'UPI')}</small></div>
+                <i class="fa-solid fa-circle-check check-icon"></i>
+            </div>`).join('');
+        if (activeUpis.length === 1) {
+            const firstItem = container.querySelector('.upi-select-item');
+            if (firstItem) { firstItem.classList.add('selected'); selectedPaymentUpiId = activeUpis[0].upiId; }
+        }
+    }
+
+    window.selectPaymentUpi = function(el, upiId) {
+        document.querySelectorAll('#upiSelectList .upi-select-item').forEach(i => i.classList.remove('selected'));
+        el.classList.add('selected');
+        selectedPaymentUpiId = upiId;
+    };
+
+    window.copyAdminUpi = function() {
+        const upi = window.__appSettings.adminUpi || window.ADMIN_UPI_ID || 'mahasell@paytm';
+        navigator.clipboard.writeText(upi);
+        alert('Admin UPI ID copied: ' + upi);
+    };
+
+    // ============ SUBMIT BUY ============
+    window.submitOrderWithPayment = async function() {
+        if (!window.__currentUser) { alert('Login first'); return; }
+        if (!currentPendingOrder) { alert('No order selected'); return; }
+        if (!selectedPaymentUpiId) { alert('Kripya payment karne wali UPI ID select karein.'); return; }
+        const utrRaw = document.getElementById('utrInput').value.trim();
+        const utrCheck = validateUTR(utrRaw);
+        if (!utrCheck.valid) { showUTRValidation(false, utrCheck.msg); alert('UTR Error: ' + utrCheck.msg); return; }
+        if (!window.uploadedScreenshotBase64) { alert('Payment screenshot upload karein.'); return; }
+        if (!screenshotMetadata) { alert('Screenshot metadata missing.'); return; }
+
+        const btn = document.getElementById('submitOrderBtn');
+        btn.disabled = true;
+        btn.innerHTML = '<i class="fa-solid fa-spinner fa-spin"></i> Verifying...';
+
+        try {
+            const dupQ = query(collection(db, 'orders'), where('utr', '==', utrRaw.toUpperCase()));
+            const dupSnap = await getDocs(dupQ);
+            if (!dupSnap.empty) {
+                btn.disabled = false; btn.innerHTML = '<i class="fa-solid fa-paper-plane"></i> Submit Payment';
+                alert('❌ Ye UTR pehle already use ho chuka hai!');
+                return;
+            }
+            const recentQ = query(collection(db, 'orders'), where('userId', '==', window.__currentUser.uid));
+            const recentSnap = await getDocs(recentQ);
+            const now = Date.now();
+            let recentOrder = null;
+            recentSnap.forEach(d => {
+                const data = d.data();
+                const ts = data.createdAt?.toMillis?.() || 0;
+                if (now - ts < 30000) recentOrder = data;
+            });
+            if (recentOrder) {
+                btn.disabled = false; btn.innerHTML = '<i class="fa-solid fa-paper-plane"></i> Submit Payment';
+                alert('⏱️ Aapne 30 second pehle hi order submit kiya hai.');
+                return;
+            }
+            btn.innerHTML = '<i class="fa-solid fa-spinner fa-spin"></i> Submitting...';
+            const { amount, range, returnAmount } = currentPendingOrder;
+            const orderData = {
+                userId: window.__currentUser.uid,
+                userName: window.__currentUser.name,
+                userEmail: window.__currentUser.email,
+                amount: amount, range: range, returnAmount: returnAmount,
+                utr: utrRaw.toUpperCase(),
+                screenshot: window.uploadedScreenshotBase64,
+                screenshotMeta: screenshotMetadata,
+                paymentUpiId: selectedPaymentUpiId,
+                status: 'pending', credited: false, type: 'buy',
+                fraudFlags: [],
+                createdAt: serverTimestamp(), updatedAt: serverTimestamp()
+            };
+            await addDoc(collection(db, 'orders'), orderData);
+
+            const userRef = doc(db, 'users', window.__currentUser.uid);
+            const userSnap = await getDoc(userRef);
+            const udata = userSnap.data() || {};
+            const today = new Date().toISOString().split('T')[0];
+            let newCount = (udata.todayOrderCount || 0) + 1;
+            if (udata.todayOrderDate !== today) newCount = 1;
+            await updateDoc(userRef, {
+                totalBuy: increment(1),
+                todayOrderCount: newCount,
+                todayOrderDate: today
+            });
+
+            if (udata.referredBy && !udata.referralBonusGiven && (udata.totalBuy || 0) + 1 >= 10) {
+                try {
+                    const referrerRef = doc(db, 'users', udata.referredBy);
+                    await updateDoc(referrerRef, {
+                        balance: increment(300),
+                        totalEarning: increment(300),
+                        totalReferralCommission: increment(300)
+                    });
+                    await updateDoc(userRef, { referralBonusGiven: true });
+                } catch (bonusErr) { console.log('Referral bonus error:', bonusErr); }
+            }
+
+            closeModal('paymentModal');
+            alert('✅ Order submit ho gaya!\n\nAdmin verification ke baad amount wallet mein add hoga.');
+            switchTab('buyHistory', document.querySelectorAll('.nav-item')[1]);
+            currentPendingOrder = null;
+            window.uploadedScreenshotBase64 = null;
+            screenshotMetadata = null;
+            selectedPaymentUpiId = null;
+        } catch (err) {
+            console.error('Order submission error:', err);
+            alert('Submission failed: ' + err.message);
+        } finally {
+            btn.disabled = false;
+            btn.innerHTML = '<i class="fa-solid fa-paper-plane"></i> Submit Payment';
+        }
+    };
+
+    // ============ SELL ============
+    window.openSellModal = function() {
+        if (!window.__currentUser) { alert('Please login first.'); return; }
+        const bal = (window.__userData && window.__userData.balance) || 0;
+        if (bal <= 0) { alert('Aapke paas sell karne ke liye balance nahi hai.'); return; }
+        document.getElementById('sellAvailableBalance').innerText = '₹' + fmtMoney(bal);
+        document.getElementById('sellAmountInput').value = '';
+        document.getElementById('sellAmountMsg').style.display = 'none';
+        selectedSellUpiId = null;
+        renderSellUpiSelection();
+        openModal('sellModal');
+    };
+
+    function renderSellUpiSelection() {
+        const container = document.getElementById('sellUpiSelectList');
+        const upis = window.userUpis || [];
+        const activeUpis = upis.filter(u => u.active === true);
+        if (!activeUpis.length) {
+            container.innerHTML = `
+                <div class="empty-state" style="padding: 15px;">
+                    <i class="fa-solid fa-exclamation-circle" style="color: var(--warning);"></i>
+                    <p style="font-size: 0.8rem;">Koi active UPI nahi hai.</p>
+                    <button class="btn btn-primary" style="margin-top: 10px; max-width: 200px; margin-left: auto; margin-right: auto;" onclick="closeModal('sellModal'); openModal('addUpiModal');"><i class="fa-solid fa-plus"></i> Add UPI Now</button>
+                </div>`;
+            return;
+        }
+        container.innerHTML = activeUpis.map(u => `
+            <div class="upi-select-item" onclick="selectSellUpi(this, '${escapeHtml(u.upiId)}')">
+                <div class="icon-wrap" style="background: linear-gradient(135deg, #2ecc71, #27ae60);"><i class="fa-solid fa-mobile-screen-button"></i></div>
+                <div class="txt-wrap"><strong>${escapeHtml(u.upiId)}</strong><small>${escapeHtml(u.appName || 'UPI')}</small></div>
+                <i class="fa-solid fa-circle-check check-icon"></i>
+            </div>`).join('');
+        if (activeUpis.length === 1) {
+            const firstItem = container.querySelector('.upi-select-item');
+            if (firstItem) { firstItem.classList.add('selected'); selectedSellUpiId = activeUpis[0].upiId; }
+        }
+    }
+
+    window.selectSellUpi = function(el, upiId) {
+        document.querySelectorAll('#sellUpiSelectList .upi-select-item').forEach(i => i.classList.remove('selected'));
+        el.classList.add('selected');
+        selectedSellUpiId = upiId;
+    };
+
+    window.submitSellRequest = async function() {
+        if (!window.__currentUser) { alert('Login first'); return; }
+        const amountVal = parseFloat(document.getElementById('sellAmountInput').value);
+        const bal = (window.__userData && window.__userData.balance) || 0;
+        if (!selectedSellUpiId) { alert('Kripya receive karne wali UPI ID select karein.'); return; }
+        if (isNaN(amountVal) || amountVal < 10) { alert('Minimum ₹10 amount sell kar sakte hain.'); return; }
+        if (amountVal > bal) { alert(`Aapke paas sirf ₹${bal.toFixed(2)} balance hai.`); return; }
+
+        const btn = document.getElementById('submitSellBtn');
+        btn.disabled = true;
+        btn.innerHTML = '<i class="fa-solid fa-spinner fa-spin"></i> Submitting...';
+
+        try {
+            const uid = window.__currentUser.uid;
+            const userRef = doc(db, 'users', uid);
+            const sellReqRef = doc(collection(db, 'sell_requests'));
+
+            await runTransaction(db, async (transaction) => {
+                const userDoc = await transaction.get(userRef);
+                if (!userDoc.exists()) throw new Error('User not found');
+                const uData = userDoc.data();
+                const currentBal = uData.balance || 0;
+                if (currentBal < amountVal) throw new Error(`Insufficient balance. Available: ₹${currentBal.toFixed(2)}`);
+
+                transaction.set(sellReqRef, {
+                    userId: uid,
+                    userName: window.__currentUser.name,
+                    userEmail: window.__currentUser.email,
+                    amount: amountVal,
+                    receiveUpiId: selectedSellUpiId,
+                    status: 'pending',
+                    type: 'sell',
+                    balanceDeducted: true,
+                    createdAt: serverTimestamp(),
+                    updatedAt: serverTimestamp()
+                });
+
+                transaction.update(userRef, {
+                    balance: currentBal - amountVal,
+                    totalSell: (uData.totalSell || 0) + 1
+                });
+            });
+
+            closeModal('sellModal');
+            alert('✅ Sell request submit ho gayi!\n\n₹' + amountVal.toFixed(2) + ' aapke balance se kat liya gaya hai.\n\nAdmin approval ke baad amount aapki UPI ID par transfer hoga.');
+            switchTab('sellHistory', document.querySelectorAll('.nav-item')[1]);
+        } catch (err) {
+            console.error('Sell request error:', err);
+            alert('Sell request failed: ' + err.message);
+        } finally {
+            btn.disabled = false;
+            btn.innerHTML = '<i class="fa-solid fa-paper-plane"></i> Submit Sell Request';
+        }
+    };
+
+    // ============ UPI MANAGEMENT ============
+    window.selectUpiApp = function(element, appName, handle) {
+        document.querySelectorAll('#addUpiModal .upi-app-card').forEach(c => c.classList.remove('selected'));
+        element.classList.add('selected');
+        document.getElementById('upiInputLabel').innerText = `Enter ${appName} UPI ID`;
+        const input = document.getElementById('upiIdInput');
+        if (handle && !input.value.includes('@')) input.value = "9876543210" + handle;
+    };
+
+    window.addNewUpi = async function() {
+        const inputVal = document.getElementById('upiIdInput').value.trim();
+        if (!inputVal || !inputVal.includes('@')) { alert('Valid UPI ID daalein.'); return; }
+        if (!/^[a-zA-Z0-9.\-_]+@[a-zA-Z]+$/.test(inputVal)) { alert('UPI ID format sahi nahi hai.'); return; }
+        if (!window.__currentUser) return;
+        const userUpis = window.userUpis || [];
+        if (userUpis.some(u => u.upiId.toLowerCase() === inputVal.toLowerCase())) { alert('Ye UPI ID already aapki list mein hai.'); return; }
+        const selectedCard = document.querySelector('#addUpiModal .upi-app-card.selected');
+        let appName = 'UPI';
+        if (selectedCard) { const nameEl = selectedCard.querySelector('.upi-app-name'); if (nameEl) appName = nameEl.innerText; }
+        const newUpi = { id: 'upi_' + Date.now(), upiId: inputVal, appName: appName, active: true, createdAt: Date.now() };
+        const updatedUpis = [...userUpis, newUpi];
+        try {
+            const updates = { upis: updatedUpis };
+            if (!window.__userData?.boundUpi) updates.boundUpi = inputVal;
+            await updateDoc(doc(db, 'users', window.__currentUser.uid), updates);
+            document.getElementById('upiIdInput').value = '';
+            alert(`UPI ID "${inputVal}" add ho gaya!`);
+        } catch (err) { alert('Error: ' + err.message); }
+    };
+
+    window.toggleUpiActive = async function(upiId, newState) {
+        if (!window.__currentUser) return;
+        const userUpis = window.userUpis || [];
+        const updated = userUpis.map(u => u.upiId === upiId ? { ...u, active: newState } : u);
+        try { await updateDoc(doc(db, 'users', window.__currentUser.uid), { upis: updated }); }
+        catch (err) { alert('Error: ' + err.message); }
+    };
+
+    window.deleteUpi = async function(upiId) {
+        if (!window.__currentUser) return;
+        if (!confirm(`Remove UPI ID "${upiId}"?`)) return;
+        const userUpis = window.userUpis || [];
+        const updated = userUpis.filter(u => u.upiId !== upiId);
+        try {
+            await updateDoc(doc(db, 'users', window.__currentUser.uid), { upis: updated });
+            alert('UPI removed.');
+        } catch (err) { alert('Error: ' + err.message); }
+    };
+
+    function renderUpiListInModal() {
+        const container = document.getElementById('upiListContainer');
+        if (!container) return;
+        const upis = window.userUpis || [];
+        document.getElementById('upiCountBadge').innerText = upis.length;
+        if (!upis.length) {
+            container.innerHTML = `<div class="empty-state" style="padding: 20px;"><i class="fa-solid fa-wallet"></i><p style="font-size: 0.8rem;">Koi UPI ID bind nahi hai.</p></div>`;
+            return;
+        }
+        container.innerHTML = upis.map(u => `
+            <div class="upi-list-card ${u.active ? 'active-upi' : 'inactive-upi'}">
+                <div class="upi-app-badge"><i class="fa-solid fa-mobile-screen-button"></i></div>
+                <div class="upi-info">
+                    <strong>${escapeHtml(u.upiId)}</strong>
+                    <small>${escapeHtml(u.appName || 'UPI')} • ${u.active ? '<span style="color:#2ecc71;">Active</span>' : '<span style="color:#e74c3c;">Inactive</span>'}</small>
+                </div>
+                <div class="upi-actions">
+                    <label class="toggle-switch">
+                        <input type="checkbox" ${u.active ? 'checked' : ''} onchange="toggleUpiActive('${escapeHtml(u.upiId)}', this.checked)">
+                        <span class="toggle-slider"></span>
+                    </label>
+                    <button class="btn btn-danger btn-sm" style="padding: 6px 10px; font-size: 0.7rem;" onclick="deleteUpi('${escapeHtml(u.upiId)}')"><i class="fa-solid fa-trash"></i></button>
+                </div>
+            </div>`).join('');
+    }
+    window.renderUpiListInModal = renderUpiListInModal;
+
+    function updateUpiDisplays() {
+        const upis = window.userUpis || [];
+        const active = upis.find(u => u.active === true);
+        document.getElementById('homeUpiDisplay').innerText = active ? active.upiId : "No Active UPI";
+        document.getElementById('drawerUpi').innerText = active ? active.upiId : "Not set";
+        document.getElementById('upiCountBadge').innerText = upis.length;
+    }
+    window.updateUpiDisplays = updateUpiDisplays;
+
+    // ============ BONUSES ============
+    window.claimDailyBonus = async function() {
+        if (!window.__currentUser) return;
+        const today = new Date().toISOString().split('T')[0];
+        if (window.__userData && window.__userData.dailyBonusClaimedDate === today) { alert('Aaj ka bonus already claim ho chuka hai.'); return; }
+        const amt = (window.__appSettings.dailyBonus !== undefined) ? window.__appSettings.dailyBonus : 10;
+        try {
+            await updateDoc(doc(db, 'users', window.__currentUser.uid), {
+                balance: increment(amt),
+                totalEarning: increment(amt),
+                dailyBonusClaimedDate: today
+            });
+            alert(`₹${amt} daily bonus add ho gaya!`);
+        } catch (e) { alert('Failed: ' + e.message); }
+    };
+
+    window.claimMilestone = async function(target) {
+        if (!window.__currentUser) return;
+        const today = new Date().toISOString().split('T')[0];
+        const udata = window.__userData || {};
+        const todayCount = udata.todayOrderCount || 0;
+        if (todayCount < target) { alert(`Aapne ${todayCount} orders kiye. ${target} chahiye!`); return; }
+        const ms = window.__appSettings.milestones || { ms10:15, ms30:50, ms100:150 };
+        const reward = ms['ms' + target] || 0;
+        const claimed = udata.milestonesClaimed || {};
+        const key = 'ms' + target;
+        if (claimed[key] === today) { alert('Ye milestone aaj claim ho chuka hai.'); return; }
+        try {
+            const updatedClaimed = { ...claimed };
+            updatedClaimed[key] = today;
+            await updateDoc(doc(db, 'users', window.__currentUser.uid), {
+                balance: increment(reward),
+                totalEarning: increment(reward),
+                milestonesClaimed: updatedClaimed
+            });
+            alert(`🎉 ₹${reward} milestone bonus credit!`);
+        } catch (e) { alert('Failed: ' + e.message); }
+    };
+
+    // ============ GIFT CODE (FIXED - robust matching + case handling) ============
+    window.openGiftCodeModal = function() {
+        document.getElementById('giftCodeInput').value = '';
+        openModal('giftCodeModal');
+    };
+
+    window.redeemGiftCode = async function() {
+        const rawInput = document.getElementById('giftCodeInput').value || '';
+        const code = rawInput.trim().toUpperCase().replace(/\s+/g, '');
+        if (!code) { alert('Code daalein.'); return; }
+        if (!window.__currentUser) { alert('Please login first.'); return; }
+
+        const btn = event && event.target && event.target.closest ? event.target.closest('button') : null;
+        if (btn) { btn.disabled = true; btn.innerHTML = '<i class="fa-solid fa-spinner fa-spin"></i> Checking...'; }
+
+        try {
+            // Try multiple lookup strategies (case sensitivity + trim + doc id)
+            let codeData = null;
+            let codeRef = null;
+
+            // 1) Direct doc lookup with uppercase (preferred)
+            codeRef = doc(db, 'gift_codes', code);
+            let snap = await getDoc(codeRef);
+            if (snap.exists()) { codeData = snap.data(); }
+
+            // 2) Query by 'code' field (uppercase match)
+            if (!codeData) {
+                const q1 = query(collection(db, 'gift_codes'), where('code', '==', code), limit(1));
+                const s1 = await getDocs(q1);
+                if (!s1.empty) { codeData = s1.docs[0].data(); codeRef = s1.docs[0].ref; }
+            }
+
+            // 3) Query by 'code' field (as-entered)
+            if (!codeData) {
+                const q2 = query(collection(db, 'gift_codes'), where('code', '==', rawInput.trim()), limit(1));
+                const s2 = await getDocs(q2);
+                if (!s2.empty) { codeData = s2.docs[0].data(); codeRef = s2.docs[0].ref; }
+            }
+
+            // 4) Query by 'codeUpper' field (uppercase)
+            if (!codeData) {
+                const q3 = query(collection(db, 'gift_codes'), where('codeUpper', '==', code), limit(1));
+                const s3 = await getDocs(q3);
+                if (!s3.empty) { codeData = s3.docs[0].data(); codeRef = s3.docs[0].ref; }
+            }
+
+            if (!codeData || !codeRef) {
+                alert('❌ Invalid gift code! Ye code database mein nahi mila.');
+                return;
+            }
+
+            if (codeData.used === true || codeData.isUsed === true) {
+                alert('❌ Ye code already use ho chuka hai.');
+                return;
+            }
+
+            // Expiry check (optional)
+            if (codeData.expiresAt) {
+                const expMs = codeData.expiresAt?.toMillis ? codeData.expiresAt.toMillis() : Number(codeData.expiresAt);
+                if (expMs && Date.now() > expMs) { alert('❌ Ye code expire ho gaya hai.'); return; }
+            }
+
+            const amt = Number(codeData.amount || codeData.value || 0);
+            if (!amt || amt <= 0) { alert('❌ Invalid amount.'); return; }
+
+            // Restrict per user (optional field)
+            if (Array.isArray(codeData.usedBy) && codeData.usedBy.includes(window.__currentUser.uid)) {
+                alert('❌ Aap ye code pehle use kar chuke hain.');
+                return;
+            }
+
+            // Mark as used
+            const updateData = {
+                used: true,
+                isUsed: true,
+                usedBy: window.__currentUser.uid,
+                usedByEmail: window.__currentUser.email || '',
+                usedAt: new Date().toISOString()
+            };
+            await updateDoc(codeRef, updateData);
+
+            // Credit wallet
+            await updateDoc(doc(db, 'users', window.__currentUser.uid), {
+                balance: increment(amt),
+                totalEarning: increment(amt)
+            });
+
+            closeModal('giftCodeModal');
+            alert(`🎁 ₹${amt} gift code bonus add ho gaya!`);
+        } catch (e) {
+            console.error('Gift code error:', e);
+            alert('Failed: ' + (e.message || e));
+        } finally {
+            if (btn) { btn.disabled = false; btn.innerHTML = '<i class="fa-solid fa-gift"></i> Redeem Code'; }
+        }
+    };
+
+    // ============ TABS ============
+    window.switchTab = function(tabId, element) {
+        const sections = document.querySelectorAll('.section');
+        sections.forEach(s => s.classList.remove('active'));
+        const sec = document.getElementById(tabId);
+        if (sec) sec.classList.add('active');
+        const navItems = document.querySelectorAll('.nav-item');
+        navItems.forEach(i => i.classList.remove('active'));
+        if (element) element.classList.add('active');
+        else {
+            const map = { home:0, orders:1, buyHistory:1, sellHistory:1, referral:3, profile:4 };
+            const idx = map[tabId];
+            if (idx !== undefined && navItems[idx]) navItems[idx].classList.add('active');
+        }
+        window.scrollTo(0, 0);
+    };
+
+    // ============ MODALS ============
+    window.openDrawer = function(id) { document.getElementById(id).style.display = 'flex'; };
+    window.closeDrawer = function(id) { document.getElementById(id).style.display = 'none'; };
+    window.closeDrawerOnOutside = function(e, id) { if (e.target.id === id) closeDrawer(id); };
+    window.openModal = function(id) {
+        document.getElementById(id).style.display = 'flex';
+        if (id === 'addUpiModal') renderUpiListInModal();
+    };
+    window.closeModal = function(id) { document.getElementById(id).style.display = 'none'; };
+    window.closeModalOnOutside = function(e, id) { if (e.target.id === id) closeModal(id); };
+
+    // ============ REFERRAL SHARE (dynamic base URL) ============
+    window.copyReferral = function() {
+        if (!window.__referralEligible) {
+            alert('Referral sharing lock hai. Pehle 25 orders complete karein.');
+            return;
+        }
+        const code = window.myReferralCode || 'MAHASELL';
+        const base = getBaseUrl();
+        const refUrl = base + '/?ref=' + encodeURIComponent(code);
+        const txt = `Join Maha Sell Trading Platform using my referral code: ${code}\nEarn daily commission!\n${refUrl}`;
+        if (navigator.clipboard && navigator.clipboard.writeText) {
+            navigator.clipboard.writeText(txt).then(() => alert('✅ Referral link copied!\n\n' + refUrl))
+                .catch(() => { prompt('Copy this link:', refUrl); });
+        } else {
+            prompt('Copy this link:', refUrl);
+        }
+    };
+
+    window.shareSocial = function(platform) {
+        if (!window.__referralEligible) {
+            alert('Referral sharing lock hai. Pehle 25 orders complete karein.');
+            return;
+        }
+        const code = window.myReferralCode || 'MAHASELL';
+        const base = getBaseUrl();
+        const refUrl = base + '/?ref=' + encodeURIComponent(code);
+        const shareText = `Join Maha Sell Trading Platform using my referral code: ${code} and earn daily commission!`;
+        const txt = encodeURIComponent(shareText + '\n' + refUrl);
+        const encUrl = encodeURIComponent(refUrl);
+        let url = "";
+        switch (platform) {
+            case 'whatsapp': url = `https://api.whatsapp.com/send?text=${txt}`; break;
+            case 'telegram': url = `https://t.me/share/url?url=${encUrl}&text=${encodeURIComponent(shareText)}`; break;
+            case 'facebook': url = `https://www.facebook.com/sharer/sharer.php?u=${encUrl}`; break;
+            case 'instagram':
+                if (navigator.clipboard && navigator.clipboard.writeText) {
+                    navigator.clipboard.writeText(shareText + '\n' + refUrl).catch(()=>{});
+                }
+                alert("Referral link copied! Opening Instagram...");
+                url = `https://instagram.com`;
+                break;
+        }
+        if (url) window.open(url, '_blank');
+    };
+
+    window.escapeHtml = function(s) {
+        if (s === null || s === undefined) return '';
+        return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;').replace(/'/g,'&#39;');
+    };
+
+    window.addEventListener('load', function() { updateUpiDisplays(); });
+</script>
+
+</body>
+</html>
